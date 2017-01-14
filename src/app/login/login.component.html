@@ -1,0 +1,50 @@
+<div class="container">
+
+  <div class="header clearfix">
+    <h3 class="text-muted">Velvet Cake Company</h3>
+  </div>
+  <div class="row justify-content-center">
+
+    <div class="col-8">
+      <div class="jumbotron">
+        <h2 class="form-signin-heading">Please login</h2>
+
+        <form name="login-form">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="model.email" aria-describedby="emailHelp" placeholder="Enter email" required>
+            <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" name="password" [(ngModel)]="model.password" placeholder="Password" required>
+          </div>
+
+
+          <div class="form-group">
+            <label class="checkbox">
+              <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
+            </label>
+          </div>
+
+          <button class="btn btn-lg btn-primary btn-block" role="button" (click)="loginClick()">Login</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <!--
+  <div class="col-md-4 col-md-offset-4">
+  <form class="form-signin">
+  <h2 class="form-signin-heading">Please login</h2>
+  <input type="text" class="form-control" name="username" placeholder="Email Address" required="" autofocus="" />
+  <input type="password" class="form-control" name="password" placeholder="Password" required=""/>
+  <label class="checkbox">
+  <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me
+</label>
+<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+</form>
+</div> -->
+
+
+</div>
