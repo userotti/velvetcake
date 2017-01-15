@@ -1,0 +1,26 @@
+<div class="cms-section">
+  <div class="row">
+    <div class="side-menu-section col-3">
+
+      <nav class="navbar navbar-inverse bg-primary">
+        <ul class="navbar-nav flex-column">
+
+          <li class="nav-item">
+            <a class="nav-link active" [routerLink]="['products']" [routerLinkActive]="['active']">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['product-categories']" [routerLinkActive]="['active']">Product Categories</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['orders']" [routerLinkActive]="['active']">Orders</a>
+          </li>
+
+        </ul>
+      </nav>
+    </div>
+
+    <div class="list-section col-9">
+      <router-outlet> </router-outlet>
+    </div>
+  </div>
+</div>

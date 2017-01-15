@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AngularFire } from 'angularfire2';
 
 @Component({
@@ -12,19 +13,27 @@ export class LoginComponent implements OnInit {
   loading = false;
   returnUrl: string;
 
-  constructor(public af: AngularFire) { }
-
+  constructor(
+      public af: AngularFire,
+      private router: Router) { }
 
 
   ngOnInit() {
-
-
+    // reset login status
+    this.af.auth.logout();
 
   }
 
-  loginClick() {
+  login() {
     this.loading = true;
-    this.af.auth.login({ email: this.model.email, password: this.model.password });
+
+    this.af.auth.login({ email: this.model.email, password: this.model.password }).then((auth) => {
+      this.loading = false;
+      this.router.navigate(['/dashboard']);
+
+    },  (err) => {
+      this.loading = false;
+    });
   }
 
 }

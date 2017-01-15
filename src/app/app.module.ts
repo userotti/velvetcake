@@ -12,6 +12,17 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
+import { AuthGuard } from './auth-guard.service';
+import { ProtectedComponent } from './protected/protected.component';
+import { CmsComponent } from './cms/cms.component';
+import { ReportsComponent } from './reports/reports.component';
+import { ProductsComponent } from './products/products.component';
+import { ProductCategoriesComponent } from './product-categories/product-categories.component';
+import { OrdersComponent } from './orders/orders.component';
+
+
 
 const myFirebaseAuthConfig = {
   provider: AuthProviders.Password,
@@ -24,7 +35,14 @@ const myFirebaseAuthConfig = {
     AppComponent,
     HomeComponent,
     WelcomeComponent,
-    LoginComponent
+    LoginComponent,
+    DashboardComponent,
+    ProtectedComponent,
+    CmsComponent,
+    ReportsComponent,
+    ProductsComponent,
+    ProductCategoriesComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +51,10 @@ const myFirebaseAuthConfig = {
     AngularFireModule.initializeApp(firebaseConfig, myFirebaseAuthConfig),
     RoutingModule
   ],
-  providers: [],
+  providers: [
+    AuthGuard
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
