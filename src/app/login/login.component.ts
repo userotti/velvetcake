@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
     this.af.auth.login({ email: this.model.email, password: this.model.password }).then((auth) => {
       this.loading = false;
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/cms/products']);
 
     },  (err) => {
       this.loading = false;

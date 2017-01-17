@@ -8,8 +8,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CmsComponent } from './cms/cms.component';
 
 import { ProductsComponent } from './products/products.component';
+import { ProductComponent } from './product/product.component';
+
 import { ProductCategoriesComponent } from './product-categories/product-categories.component';
-import { OrdersComponent } from './orders/orders.component';
+import { OrdersComponent } from './protected/orders/orders.component';
 
 
 
@@ -29,18 +31,21 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'dashboard',  component: DashboardComponent},
+      { path: 'orders',  component: OrdersComponent},
       { path: 'cms',
-        component: CmsComponent,
-        children: [
-          { path: 'products',  component: ProductsComponent},
-          { path: 'product-categories',  component: ProductCategoriesComponent},
-          { path: 'orders',  component: OrdersComponent},
-        ]
-      },
-      { path: 'reports',  component: ReportsComponent},
+          component: CmsComponent,
+          children: [
+            { path: 'products',  component: ProductsComponent},
+            { path: 'products/:id',  component: ProductComponent},
+            { path: 'product-categories',  component: ProductCategoriesComponent},
 
-    ]
-  },
+
+      ]
+    },
+    { path: 'reports',  component: ReportsComponent},
+
+  ]
+},
 
 
 

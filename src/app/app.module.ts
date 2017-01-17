@@ -20,7 +20,10 @@ import { CmsComponent } from './cms/cms.component';
 import { ReportsComponent } from './reports/reports.component';
 import { ProductsComponent } from './products/products.component';
 import { ProductCategoriesComponent } from './product-categories/product-categories.component';
-import { OrdersComponent } from './orders/orders.component';
+import { OrdersComponent } from './protected/orders/orders.component';
+import { ProductComponent } from './product/product.component';
+import { AddOnsComponent } from './add-ons/add-ons.component';
+import { AdjustmentsComponent } from './adjustments/adjustments.component';
 
 
 
@@ -42,7 +45,10 @@ const myFirebaseAuthConfig = {
     ReportsComponent,
     ProductsComponent,
     ProductCategoriesComponent,
-    OrdersComponent
+    OrdersComponent,
+    ProductComponent,
+    AddOnsComponent,
+    AdjustmentsComponent
   ],
   imports: [
     BrowserModule,

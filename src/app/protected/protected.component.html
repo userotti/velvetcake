@@ -1,4 +1,4 @@
-<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary rounded">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -7,15 +7,21 @@
   <div class="collapse navbar-collapse" id="navbarNav">
 
     <ul class="navbar-nav mr-auto">
+
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/dashboard']" >Dashboard</a>
+        <a class="nav-link" [routerLink]="['/cms/products']">CMS</a>
       </li>
+
       <li class="nav-item" [routerLinkActive]="['active']">
-        <a class="nav-link" [routerLink]="['/cms']">CMS</a>
+        <a class="nav-link" [routerLink]="['/orders']">Orders</a>
       </li>
+
       <li class="nav-item" [routerLinkActive]="['active']">
         <a class="nav-link" [routerLink]="['/reports']">Reports</a>
       </li>
+
+
+
 
     </ul>
 

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="side-menu-section col-3">
 
-      <nav class="navbar navbar-inverse bg-primary">
+      <nav class="navbar navbar-inverse bg-primary rounded">
         <ul class="navbar-nav flex-column">
 
           <li class="nav-item">
@@ -11,8 +11,16 @@
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['product-categories']" [routerLinkActive]="['active']">Product Categories</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" [routerLink]="['orders']" [routerLinkActive]="['active']">Orders</a>
+          </li> -->
+
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['orders']" [routerLinkActive]="['active']">Add-ons</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['orders']" [routerLinkActive]="['active']">Adjustments</a>
           </li>
 
         </ul>

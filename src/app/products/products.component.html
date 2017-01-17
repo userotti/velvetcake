@@ -1,3 +1,12 @@
-<p>
-  products works!
-</p>
+<div class="d-flex justify-content-between pb-2">
+  <span class="h4"> Products: </span>
+  <button role="button" class="btn btn-success" (click)="addNewProduct()" > + Add new product </button>
+</div>
+
+<div *ngIf="isLoading">Loading data...</div>
+
+<div *ngIf="!isLoading">
+  <ul class="list-group">
+    <a *ngFor="let item of items | async" [routerLink]="[item.$key]" class="list-group-item list-group-item-action">{{ item.description }}</a>
+  </ul>
+</div>

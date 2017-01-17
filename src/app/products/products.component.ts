@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -7,9 +9,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductsComponent implements OnInit {
 
-  constructor() { }
+  items: FirebaseListObservable<any[]>;
+  isLoading: boolean;
+
+  constructor(
+    private af: AngularFire,
+    private router: Router) {
+
+  }
 
   ngOnInit() {
+
+    this.isLoading = true;
+
+    this.items = this.af.database.list('/products');
+    this.items.subscribe(complete => {
+            this.isLoading = false;
+        });
+
+  }
+
+  addNewProduct() {
+
+    this.items.push({}).then(item => {
+      this.router.navigate(['/cms/products', item.key]);
+    })
+
   }
 
 }
