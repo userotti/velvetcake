@@ -6,13 +6,12 @@ import { Subscription }             from 'rxjs';
 
 import 'rxjs/add/operator/switchMap';
 
-
 @Component({
-  selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss']
+  selector: 'app-product-category',
+  templateUrl: './product-category.component.html',
+  styleUrls: ['./product-category.component.scss']
 })
-export class ProductComponent implements OnInit {
+export class ProductCategoryComponent implements OnInit {
 
   itemObservable: FirebaseObjectObservable<any[]>;
   subscription: Subscription;
@@ -32,9 +31,10 @@ export class ProductComponent implements OnInit {
   ngOnInit() {
 
     this.item = {}
+
     this.subscription = this.route.params.switchMap((params: Params) => {
       this.product_id = params['id']
-      return this.itemObservable = this.af.database.object('/products/'+params['id'])
+      return this.itemObservable = this.af.database.object('/product-categories/'+params['id'])
     }).subscribe((item) => {
       this.item = item;
     });
@@ -42,19 +42,17 @@ export class ProductComponent implements OnInit {
 
   }
 
-  deleteProduct() {
+  deleteItem() {
     this.itemObservable.remove().then(item => {
       this._location.back();
     })
   }
 
-  updateProduct() {
+  updateItem() {
     console.log('UPDATING: this.item: ', this.item);
     this.itemObservable.update({
 
       description: this.item.description,
-      price: this.item.price,
-
 
     }).then(item => {
       this._location.back();

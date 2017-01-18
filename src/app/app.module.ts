@@ -24,6 +24,9 @@ import { OrdersComponent } from './protected/orders/orders.component';
 import { ProductComponent } from './product/product.component';
 import { AddOnsComponent } from './add-ons/add-ons.component';
 import { AdjustmentsComponent } from './adjustments/adjustments.component';
+import { ProductCategoryComponent } from './product-category/product-category.component';
+import { AddOnComponent } from './add-on/add-on.component';
+import { AdjustmentComponent } from './adjustment/adjustment.component';
 
 
 
@@ -48,7 +51,10 @@ const myFirebaseAuthConfig = {
     OrdersComponent,
     ProductComponent,
     AddOnsComponent,
-    AdjustmentsComponent
+    AdjustmentsComponent,
+    ProductCategoryComponent,
+    AddOnComponent,
+    AdjustmentComponent
   ],
   imports: [
     BrowserModule,

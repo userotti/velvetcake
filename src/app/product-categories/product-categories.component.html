@@ -1,8 +1,12 @@
 <div class="d-flex justify-content-between pb-2">
-  <span class="h4"> Products Categories: </span>
-  <button class="btn btn-primary"> + Add new category </button>
+  <span class="h4"> Product Categories: </span>
+  <button role="button" class="btn btn-success" (click)="addNewItem()" > + Add new category </button>
 </div>
 
-<ul class="list-group">
-  <a *ngFor="let item of items | async" [routerLink]="[item.$key]" class="list-group-item list-group-item-action">{{ item.description }}</a>
-</ul>
+<div *ngIf="isLoading">Loading data...</div>
+
+<div *ngIf="!isLoading">
+  <ul class="list-group">
+    <a *ngFor="let item of items | async" [routerLink]="[item.$key]" class="list-group-item list-group-item-action">{{ item.description }}</a>
+  </ul>
+</div>
