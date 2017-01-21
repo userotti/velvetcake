@@ -4,19 +4,23 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { LoginComponent } from './login/login.component';
 
 import { ProtectedComponent } from './protected/protected.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { CmsComponent } from './cms/cms.component';
 
-import { ProductsComponent } from './products/products.component';
-import { ProductComponent } from './product/product.component';
-import { ProductCategoriesComponent } from './product-categories/product-categories.component';
-import { ProductCategoryComponent } from './product-category/product-category.component';
-import { AddOnsComponent } from './add-ons/add-ons.component';
-import { AddOnComponent } from './add-on/add-on.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
+
+import { CmsComponent } from './protected/cms/cms.component';
+import { ProductsComponent } from './protected/cms/products/products.component';
+import { ProductComponent } from './protected/cms/product/product.component';
+import { ProductCategoriesComponent } from './protected/cms/product-categories/product-categories.component';
+import { ProductCategoryComponent } from './protected/cms/product-category/product-category.component';
+import { AddOnsComponent } from './protected/cms/add-ons/add-ons.component';
+import { AddOnComponent } from './protected/cms/add-on/add-on.component';
+import { AdjustmentComponent } from './protected/cms/adjustment/adjustment.component';
+import { AdjustmentsComponent } from './protected/cms/adjustments/adjustments.component';
 
 
 import { OrdersComponent } from './protected/orders/orders.component';
-import { ReportsComponent } from './reports/reports.component';
+import { ReportsComponent } from './protected/reports/reports.component';
 import { AuthGuard } from './auth-guard.service';
 
 const routes: Routes = [
@@ -39,7 +43,8 @@ const routes: Routes = [
             { path: 'product-categories/:id',  component: ProductCategoryComponent},
             { path: 'add-ons',  component: AddOnsComponent},
             { path: 'add-ons/:id',  component: AddOnComponent},
-
+            { path: 'adjustments',  component: AdjustmentsComponent},
+            { path: 'adjustments/:id',  component: AdjustmentComponent},
 
       ]
     },

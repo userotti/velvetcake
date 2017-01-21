@@ -16,17 +16,20 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { AuthGuard } from './auth-guard.service';
 import { ProtectedComponent } from './protected/protected.component';
-import { CmsComponent } from './cms/cms.component';
-import { ReportsComponent } from './reports/reports.component';
-import { ProductsComponent } from './products/products.component';
-import { ProductCategoriesComponent } from './product-categories/product-categories.component';
+
 import { OrdersComponent } from './protected/orders/orders.component';
-import { ProductComponent } from './product/product.component';
-import { AddOnsComponent } from './add-ons/add-ons.component';
-import { AdjustmentsComponent } from './adjustments/adjustments.component';
-import { ProductCategoryComponent } from './product-category/product-category.component';
-import { AddOnComponent } from './add-on/add-on.component';
-import { AdjustmentComponent } from './adjustment/adjustment.component';
+import { ReportsComponent } from './protected/reports/reports.component';
+import { CmsComponent } from './protected/cms/cms.component';
+
+
+import { ProductsComponent } from './protected/cms/products/products.component';
+import { ProductCategoriesComponent } from './protected/cms/product-categories/product-categories.component';
+import { ProductComponent } from './protected/cms/product/product.component';
+import { AddOnsComponent } from './protected/cms/add-ons/add-ons.component';
+import { AdjustmentsComponent } from './protected/cms/adjustments/adjustments.component';
+import { ProductCategoryComponent } from './protected/cms/product-category/product-category.component';
+import { AddOnComponent } from './protected/cms/add-on/add-on.component';
+import { AdjustmentComponent } from './protected/cms/adjustment/adjustment.component';
 
 
 
