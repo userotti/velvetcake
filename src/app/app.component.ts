@@ -13,7 +13,8 @@ export class AppComponent {
   items: FirebaseListObservable<any[]>;
 
   constructor(private af: AngularFire) {
-    this.items = af.database.list('/items');
+    console.log('is die die regte app?');
+    
   }
 
 }

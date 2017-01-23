@@ -32,7 +32,7 @@ export class ProductsComponent implements OnInit {
     this.searchWord = '';
 
     this.itemsListObservable.subscribe(items => {
-      console.log("items: ", items);
+      // console.log("items: ", items);
       this.isLoading = false;
       this.items = items;
       this.applySearchKeyWord();

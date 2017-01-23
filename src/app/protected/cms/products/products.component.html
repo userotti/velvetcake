@@ -2,9 +2,10 @@
   <span class="h4"> Products: </span>
 
   <div class="d-flex justify-content-end">
-    <input type="text" class="form-control mr-2" placeholder="Search" [(ngModel)]="searchWord" (ngModelChange)="applySearchKeyWord()">
-    <button role="button" class="btn btn-success" (click)="addNewProduct()" > + Add new product </button>
-
+    <div class="form-inline">
+      <input type="text" class="form-control mr-2" placeholder="Search" [(ngModel)]="searchWord" (ngModelChange)="applySearchKeyWord()">
+      <button role="button" class="btn btn-success" (click)="addNewProduct()" > + Add new product </button>
+    </div>
   </div>
 
 </div>
@@ -13,6 +14,10 @@
 
 <div *ngIf="!isLoading">
   <ul class="list-group">
-    <a *ngFor="let item of itemsFiltered" [routerLink]="[item.$key]" class="list-group-item list-group-item-action">{{ item.description }}</a>
+
+    <a *ngFor="let item of itemsFiltered" [routerLink]="[item.$key]" class="list-group-item list-group-item-action d-flex justify-content-between">
+      <span>{{ item.description }}</span>
+      <img *ngIf="item.thumbnail_url" class="custom-thumbnail" [src]="item.thumbnail_url" />
+    </a>
   </ul>
 </div>

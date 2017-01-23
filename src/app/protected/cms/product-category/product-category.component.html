@@ -4,11 +4,19 @@
 </div>
 
 <form>
+
   <div class="form-group row" name="form">
     <label for="description" class="col-2 col-form-label">Description</label>
     <div class="col-10">
-      <input class="form-control" name="description" type="text" [(ngModel)]="item.description" id="description-input">
+      <input class="form-control" name="description" type="text" [(ngModel)]="item.description" id="description-input" required>
+    </div>
+  </div>
 
+  <div class="form-group row" name="form">
+    <label for="detail" class="col-2 col-form-label">Detail</label>
+    <div class="col-10">
+      <textarea class="form-control" name="detail" type="text" [(ngModel)]="item.detail" id="detail-input" required>
+      </textarea>
     </div>
   </div>
 

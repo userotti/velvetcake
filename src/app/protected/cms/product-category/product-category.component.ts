@@ -50,9 +50,13 @@ export class ProductCategoryComponent implements OnInit {
 
   updateItem() {
     console.log('UPDATING: this.item: ', this.item);
+
+
     this.itemObservable.update({
 
       description: this.item.description,
+      detail: this.item.detail,
+
 
     }).then(item => {
       this._location.back();

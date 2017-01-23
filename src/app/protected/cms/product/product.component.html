@@ -5,20 +5,70 @@
 
 <form>
   <div class="form-group row" name="form">
-    <label for="description" class="col-2 col-form-label">Description</label>
-    <div class="col-10">
+    <label for="description" class="col-3 col-form-label">Description</label>
+    <div class="col-9">
       <input class="form-control" name="description" type="text" [(ngModel)]="item.description" id="description-input">
+    </div>
+  </div>
+
+
+  <div class="form-group row" name="form">
+    <label for="thumbnail" class="col-3 col-form-label">Thumbnail</label>
+    <div class="col-9">
+      <label class="btn btn-primary" role="button" for="my-file-selector">
+          <input id="my-file-selector" (change)="uploadImage($event)" type="file" style="display:none;">
+          Choose a file
+      </label>
+
+      <img *ngIf="uploading_thumbnail" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+
+      <div *ngIf="item.thumbnail_url">
+        <img  class="img-fluid img-thumbnail" [src]="item.thumbnail_url" />
+      </div>
 
     </div>
   </div>
+
+
+
+
   <div class="form-group row">
-    <label for="price" class="col-2 col-form-label">Price</label>
-    <div class="col-10">
+    <label for="detail" class="col-3 col-form-label">Detail</label>
+    <div class="col-9">
+      <textarea class="form-control" name="detail" type="text" [(ngModel)]="item.detail" id="detail-textarea">
+      </textarea>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="diameter" class="col-3 col-form-label">Diameter(cm)</label>
+    <div class="col-9">
+      <input class="form-control" name="diameter" type="text" [(ngModel)]="item.diameter" id="diameter-input">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="price" class="col-3 col-form-label">Price</label>
+    <div class="col-9">
       <input class="form-control" name="price" type="text" [(ngModel)]="item.price" id="price-input">
     </div>
   </div>
+
+  <div class="form-group row">
+    <label for="product_category" class="col-3 col-form-label">Product Category</label>
+    <div class="col-9">
+      <select class="form-control" [(ngModel)]="item.product_category" name="product_category" id="product-category-input">
+         <option *ngFor="let category of productCategoryListObservable | async"
+           [value]="category.$key">
+              {{category.description}}
+         </option>
+      </select>
+    </div>
+  </div>
+
+
 </form>
 
 <div class="d-flex justify-content-end pt-4">
-  <button role="button" class="btn btn-success" (click)="updateProduct()"> Save </button>
+  <button role="button" class="btn btn-success" (click)="updateItem()"> Save </button>
 </div>
