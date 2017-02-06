@@ -3,11 +3,13 @@
   <button role="button" class="btn btn-danger" (click)="deleteProduct()"> Delete Product </button>
 </div>
 
-<form>
+<form (ngSubmit)="updateItem()" #productForm="ngForm">
+
   <div class="form-group row" name="form">
     <label for="description" class="col-3 col-form-label">Description</label>
     <div class="col-9">
-      <input class="form-control" name="description" type="text" [(ngModel)]="item.description" id="description-input">
+      <input class="form-control" name="description" type="text" [(ngModel)]="item.description" id="description-input" required #spy>
+      {{spy.className}}
     </div>
   </div>
 
@@ -67,8 +69,7 @@
   </div>
 
 
+  <div class="d-flex justify-content-end pt-4">
+    <button type="submit"  role="button" class="btn btn-success" [disabled]="!productForm.form.valid"> Save </button>
+  </div>
 </form>
-
-<div class="d-flex justify-content-end pt-4">
-  <button role="button" class="btn btn-success" (click)="updateItem()"> Save </button>
-</div>

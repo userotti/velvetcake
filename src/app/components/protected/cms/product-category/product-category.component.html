@@ -20,6 +20,32 @@
     </div>
   </div>
 
+  <div class="form-group row">
+    <label for="product_category" class="col-2 col-form-label">Products</label>
+    <div class="col-5">
+      <select class="form-control" [(ngModel)]="selected_product" name="products" id="product-category-input">
+         <option *ngFor="let product of productListObservable | async"
+           [value]="product.$key">
+              {{product.description}}
+         </option>
+      </select>
+    </div>
+
+    <div class="col-5">
+      <button role="button" class="btn btn-success" (click)="addProduct()"> Add Product </button>
+    </div>
+  </div>
+
+
+  <div class="form-group row">
+    <label for="product_category" class="col-2 col-form-label"></label>
+    <div class="col-10">
+      <label class="btn btn-primary" *ngFor="let product of listProducts()"></label>
+    </div>
+
+  </div>
+
+
 </form>
 
 <div class="d-flex justify-content-end pt-4">
