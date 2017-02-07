@@ -17,7 +17,7 @@
 
     <a *ngFor="let item of itemsFiltered" [routerLink]="[item.$key]" class="list-group-item list-group-item-action d-flex justify-content-between">
       <span>{{ item.description }}</span>
-      <img *ngIf="item.thumbnail_url" class="custom-thumbnail" [src]="item.thumbnail_url" />
+      <!-- <img *ngIf="item.thumbnail_url" class="custom-thumbnail" [src]="item.thumbnail_url" /> -->
     </a>
   </ul>
 </div>

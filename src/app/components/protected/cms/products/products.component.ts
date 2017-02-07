@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 
+import { Product }             from '../../../../models/product.model';
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -54,7 +56,7 @@ export class ProductsComponent implements OnInit {
   }
 
   addNewProduct() {
-    this.itemsListObservable.push({}).then(item => {
+    this.itemsListObservable.push(new Product()).then(item => {
       this.router.navigate(['/cms/products', item.key]);
     })
   }

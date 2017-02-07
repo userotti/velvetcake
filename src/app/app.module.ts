@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+
 import { RoutingModule }     from './routing.module';
 
 import { AngularFireModule, AuthProviders, AuthMethods, FirebaseApp } from 'angularfire2';
@@ -30,7 +31,8 @@ import { AdjustmentsComponent } from './components/protected/cms/adjustments/adj
 import { ProductCategoryComponent } from './components/protected/cms/product-category/product-category.component';
 import { AddOnComponent } from './components/protected/cms/add-on/add-on.component';
 import { AdjustmentComponent } from './components/protected/cms/adjustment/adjustment.component';
-
+import { TagsComponent } from './components/protected/cms/tags/tags.component';
+import { TagComponent } from './components/protected/cms/tag/tag.component';
 
 
 const myFirebaseAuthConfig = {
@@ -57,7 +59,10 @@ const myFirebaseAuthConfig = {
     AdjustmentsComponent,
     ProductCategoryComponent,
     AddOnComponent,
-    AdjustmentComponent
+    AdjustmentComponent,
+    TagsComponent,
+    TagComponent
+
   ],
   imports: [
     BrowserModule,

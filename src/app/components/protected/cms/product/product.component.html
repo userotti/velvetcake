@@ -1,75 +1,100 @@
-<div class="d-flex justify-content-between pb-2">
-  <button role="button" class="btn btn-primary" [routerLink]="['../']"> Back </button>
-  <button role="button" class="btn btn-danger" (click)="deleteProduct()"> Delete Product </button>
+<div *ngIf="loading">
+  loading...
 </div>
+<div [hidden]="loading">
 
-<form (ngSubmit)="updateItem()" #productForm="ngForm">
-
-  <div class="form-group row" name="form">
-    <label for="description" class="col-3 col-form-label">Description</label>
-    <div class="col-9">
-      <input class="form-control" name="description" type="text" [(ngModel)]="item.description" id="description-input" required #spy>
-      {{spy.className}}
-    </div>
+  <div class="d-flex justify-content-between pb-2">
+    <button role="button" class="btn btn-primary" [routerLink]="['../']"> Back </button>
+    <button role="button" class="btn btn-danger" (click)="deleteProduct()"> Delete Product </button>
   </div>
 
+  <form (ngSubmit)="updateItem()" [formGroup]="productForm">
 
-  <div class="form-group row" name="form">
-    <label for="thumbnail" class="col-3 col-form-label">Thumbnail</label>
-    <div class="col-9">
-      <label class="btn btn-primary" role="button" for="my-file-selector">
-          <input id="my-file-selector" (change)="uploadImage($event)" type="file" style="display:none;">
-          Choose a file
-      </label>
+    <div class="form-group row">
+      <label for="description" class="col-3 col-form-label">Description</label>
+      <div class="col-9">
+        <input class="form-control" name="description" type="text" formControlName="description">
+      </div>
+    </div>
 
-      <img *ngIf="uploading_thumbnail" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
 
-      <div *ngIf="item.thumbnail_url">
-        <img  class="img-fluid img-thumbnail" [src]="item.thumbnail_url" />
+    <div class="form-group row">
+      <label for="thumbnail" class="col-3 col-form-label">Thumbnail</label>
+      <div class="col-9">
+        <label class="btn btn-primary" role="button" for="my-file-selector">
+            <input id="my-file-selector" (change)="uploadImage($event)" type="file" style="display:none;">
+            Choose a file
+        </label>
+        <input type="text" style="display:none;" formControlName="thumbnail_url">
+        <img *ngIf="uploading_thumbnail" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+
+        <div *ngIf="productForm.get('thumbnail_url').value">
+          <img  class="img-fluid img-thumbnail" [src]="productForm.get('thumbnail_url').value" />
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="detail" class="col-3 col-form-label">Detail</label>
+      <div class="col-9">
+        <textarea class="form-control" name="detail" type="text" formControlName="detail">
+        </textarea>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="diameter" class="col-3 col-form-label">Diameter(cm)</label>
+      <div class="col-9">
+        <input class="form-control" name="diameter" type="text" formControlName="diameter">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="price" class="col-3 col-form-label">Price</label>
+      <div class="col-9">
+        <input class="form-control" name="price" type="text" formControlName="price">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="product_category" class="col-3 col-form-label">Product Category</label>
+      <div class="col-9">
+        <select class="form-control" formControlName="product_category">
+           <option *ngFor="let category of productCategoryListObservable | async"
+             [value]="category.$key">
+                {{category.description}}
+           </option>
+        </select>
+      </div>
+    </div>
+
+    <div  class="form-group row" >
+      <label for="thumbnail" class="col-3 col-form-label">Tags</label>
+      <div class="col-9">
+
+        <div class="mt-2">
+          <label class="btn btn-primary mr-2" *ngFor="let tag of productsTags" (click)="removeTag(tag.$key)"> {{tag.description}} </label>
+        </div>
+
+        <div class="d-flex justify-content-start">
+            <select class="form-control mr-2"  name="tags" formControlName="selectedTag">
+               <option value="" disabled >Select a tag</option>
+               <option *ngFor="let tag of tagListObservable | async"
+                 [value]="tag.$key">
+                    {{tag.description}}
+               </option>
+            </select>
+            <label role="button" class="btn btn-success" (click)="addTag()"> Add Tag </label>
+        </div>
       </div>
 
     </div>
-  </div>
 
 
-
-
-  <div class="form-group row">
-    <label for="detail" class="col-3 col-form-label">Detail</label>
-    <div class="col-9">
-      <textarea class="form-control" name="detail" type="text" [(ngModel)]="item.detail" id="detail-textarea">
-      </textarea>
+    <div class="d-flex justify-content-end pt-4">
+      <button type="submit"  role="button" class="btn btn-success" [disabled]="!productForm.valid"> Save </button>
     </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="diameter" class="col-3 col-form-label">Diameter(cm)</label>
-    <div class="col-9">
-      <input class="form-control" name="diameter" type="text" [(ngModel)]="item.diameter" id="diameter-input">
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="price" class="col-3 col-form-label">Price</label>
-    <div class="col-9">
-      <input class="form-control" name="price" type="text" [(ngModel)]="item.price" id="price-input">
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="product_category" class="col-3 col-form-label">Product Category</label>
-    <div class="col-9">
-      <select class="form-control" [(ngModel)]="item.product_category" name="product_category" id="product-category-input">
-         <option *ngFor="let category of productCategoryListObservable | async"
-           [value]="category.$key">
-              {{category.description}}
-         </option>
-      </select>
-    </div>
-  </div>
-
-
-  <div class="d-flex justify-content-end pt-4">
-    <button type="submit"  role="button" class="btn btn-success" [disabled]="!productForm.form.valid"> Save </button>
-  </div>
-</form>
+  </form>
+</div>
+<!-- {{ productForm.value | json}} -->

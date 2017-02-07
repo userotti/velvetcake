@@ -17,6 +17,11 @@ import { AddOnsComponent } from './components/protected/cms/add-ons/add-ons.comp
 import { AddOnComponent } from './components/protected/cms/add-on/add-on.component';
 import { AdjustmentComponent } from './components/protected/cms/adjustment/adjustment.component';
 import { AdjustmentsComponent } from './components/protected/cms/adjustments/adjustments.component';
+import { TagsComponent } from './components/protected/cms/tags/tags.component';
+import { TagComponent } from './components/protected/cms/tag/tag.component';
+
+
+
 
 
 import { OrdersComponent } from './components/protected/orders/orders.component';
@@ -45,6 +50,8 @@ const routes: Routes = [
             { path: 'add-ons/:id',  component: AddOnComponent},
             { path: 'adjustments',  component: AdjustmentsComponent},
             { path: 'adjustments/:id',  component: AdjustmentComponent},
+            { path: 'tags',  component: TagsComponent},
+            { path: 'tags/:id',  component: TagComponent},
 
       ]
     },

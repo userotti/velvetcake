@@ -1,10 +1,21 @@
 import { Component, Input, OnInit, Inject } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, FormArray }   from '@angular/forms';
+
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable, FirebaseApp } from 'angularfire2';
 import { Location }                 from '@angular/common';
-import { Subscription }             from 'rxjs';
+import { Subscription, Observable }             from 'rxjs';
+
+import { Product }             from '../../../../models/product.model';
+import { Tag }             from '../../../../models/tag.model';
+import { ProductCategory }             from '../../../../models/product-category.model';
 
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/zip';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/mergeMap';
+// import 'rxjs/add/operator/forkJoin';
+import 'rxjs/add/operator/take';
 
 
 @Component({
@@ -14,12 +25,28 @@ import 'rxjs/add/operator/switchMap';
 })
 export class ProductComponent implements OnInit {
 
-  itemObservable: FirebaseObjectObservable<any[]>;
-  productCategoryListObservable: FirebaseListObservable<any[]>;
-  subscription: Subscription;
-  product_id: String;
-  item: any;
-  productCategories: any[];
+  loading = true;
+  productObservable: FirebaseObjectObservable<any>;
+  productsTagsObservable: FirebaseObjectObservable<any[]>;
+
+
+
+  productCategoryListObservable: FirebaseListObservable<ProductCategory[]>;
+  tagListObservable: FirebaseListObservable<Tag[]>;
+
+  productForm: FormGroup;
+  productsTagsForm: FormGroup;
+
+  productData: any;
+  productsTags: Array<any>;
+
+  productsTagsData: any;
+  tagsData: Array<any>;
+
+  productId: string;
+
+  tagsKeysArray: Array<string>;
+
   firebaseRef: any;
   uploading_thumbnail: boolean;
 
@@ -28,33 +55,84 @@ export class ProductComponent implements OnInit {
     private af: AngularFire,
     private router : Router,
     private _location: Location,
-    @Inject(FirebaseApp) firebaseApp: any
-  ) {
+    @Inject(FirebaseApp) firebaseApp: any,
+    private fb: FormBuilder)
+    {
 
     this.firebaseRef = firebaseApp;
+
+    this.productForm = this.fb.group({
+      description: ['', [Validators.required]],
+      thumbnail_url: [''],
+      detail: [''],
+      diameter: [''],
+      price: [''],
+      product_category: [''],
+      selectedTag: ['']
+    })
+
+    this.productsTagsForm = this.fb.group({
+      tags: this.fb.array([])
+    })
 
   }
 
   ngOnInit() {
 
-    this.item = {}
-    this.subscription = this.route.params.switchMap((params: Params) => {
-      this.product_id = params['id']
-      return this.itemObservable = this.af.database.object('/products/'+params['id'])
-    }).subscribe((item) => {
-      this.item = item;
+    this.route.params.take(1).subscribe((params: Params) => {
+      this.productId = params['id'];
+      this.productObservable = this.af.database.object('/products/'+params['id']);
+      this.productsTagsObservable = this.af.database.object('/productsTags/'+params['id']);
     });
 
+    this.tagListObservable = this.af.database.list('/tags');
     this.productCategoryListObservable = this.af.database.list('/product-categories');
-    this.productCategoryListObservable.subscribe((items) => {
-      this.productCategories = items;
-    });
 
+
+    Observable.combineLatest([
+      this.productObservable,
+      this.productsTagsObservable,
+      this.tagListObservable,
+      this.productCategoryListObservable]).take(1).subscribe((data)=>{
+
+        this.loading = false;
+        this.productData = data[0];
+        this.productsTagsData = data[1];
+        this.tagsData = data[2];
+
+        this.productForm.setValue({
+          description: this.productData.description,
+          thumbnail_url: this.productData.thumbnail_url,
+          detail: this.productData.detail,
+          diameter: this.productData.diameter,
+          price: this.productData.price,
+          product_category: this.productData.product_category,
+          selectedTag: ''
+        });
+
+        this.productsTags = this.tagsData.filter(tag => this.productsTagsData.hasOwnProperty(tag.$key));
+
+      });
 
   }
 
+
+
+
+
+
   deleteProduct() {
-    this.itemObservable.remove().then(item => {
+    this.productObservable.remove().then(item => {
+
+      //Save the relationship data
+      this.productsTagsObservable.remove();
+
+      //Save the revers relationship data
+      for (let tag of this.productsTags){
+        this.af.database.object('/tagsProducts/'+tag.$key+'/' + this.productData.$key).remove();
+      }
+
+    }).then(item => {
       this._location.back();
     })
   }
@@ -62,41 +140,69 @@ export class ProductComponent implements OnInit {
   uploadImage(event) {
 
     this.uploading_thumbnail = true;
-    // var file = new File([],event.target.file);
-    let ref = this.firebaseRef.storage().ref().child('images/'+ 'regular' + this.item.$key);
+    let ref = this.firebaseRef.storage().ref().child('images/'+ 'thumbnail-' + this.productId);
     var metadata = {
       contentType: 'image/jpeg',
     };
 
     ref.put(event.target.files[0], metadata).then((snapshot) =>{
-      console.log('Uploaded a blob or file!', snapshot);
       this.uploading_thumbnail = false;
-      this.item.thumbnail_url = snapshot.downloadURL;
-      console.log("this.item.thumbnail_url: ", this.item.thumbnail_url)
+      this.productForm.patchValue({
+        thumbnail_url: snapshot.downloadURL,
+      });
     });
 
   }
 
-  updateItem() {
-    console.log('UPDATING: this.item: ', this.item);
-    this.itemObservable.update({
+  addTag() {
 
-      description: this.item.description,
-      thumbnail_url: this.item.thumbnail_url,
-      detail: this.item.detail,
-      diameter: this.item.diameter,
-      price: this.item.price,
-      product_category: this.item.product_category,
+    let tag_id = this.productForm.get('selectedTag').value;
+    if ((this.productsTags.filter(tag => tag.$key == tag_id).length == 0) && (tag_id.length)){
+      this.productsTags.push(this.tagsData.filter(tag => {
+        return tag.$key == this.productForm.get('selectedTag').value
+      })[0]);
+    }
+  }
+
+  removeTag(tagId) {
+    this.productsTags = this.productsTags.filter(tag => {
+      return !(tag.$key === tagId)
+    });
+  }
+
+  updateItem() {
+
+    //Save the product data
+    this.productObservable.set({
+
+      description: this.productForm.get('description').value,
+      thumbnail_url: this.productForm.get('thumbnail_url').value,
+      detail: this.productForm.get('detail').value,
+      diameter: this.productForm.get('diameter').value,
+      price: this.productForm.get('price').value,
+      product_category: this.productForm.get('product_category').value,
+
+    }).then(product => {
+
+      //Save the relationship data
+      let tagsObject = {}
+      for (let tag of this.productsTags){
+        tagsObject[tag.$key] = true;
+      }
+      this.productsTagsObservable.set(tagsObject);
+
+      //Save the revers relationship data
+      for (let tag of this.productsTags){
+        let newEntry = {}
+        newEntry[this.productData.$key] = true;
+        this.af.database.object('/tagsProducts/'+tag.$key).update(newEntry);
+      }
 
 
 
     }).then(item => {
       this._location.back();
     })
-  }
-
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 
 }

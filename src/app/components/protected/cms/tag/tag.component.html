@@ -1,0 +1,20 @@
+<div class="d-flex justify-content-between pb-2">
+  <button role="button" class="btn btn-primary" [routerLink]="['../']"> Back </button>
+  <button role="button" class="btn btn-danger" (click)="deleteItem()"> Delete Tag </button>
+</div>
+
+<form>
+
+  <div class="form-group row" name="form">
+    <label for="description" class="col-2 col-form-label">Description</label>
+    <div class="col-10">
+      <input class="form-control" name="description" type="text" [(ngModel)]="item.description" id="description-input" required>
+    </div>
+  </div>
+
+  
+</form>
+
+<div class="d-flex justify-content-end pt-4">
+  <button role="button" class="btn btn-success" (click)="updateItem()"> Save </button>
+</div>

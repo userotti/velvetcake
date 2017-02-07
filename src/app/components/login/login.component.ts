@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  loginErrorMessage: string;
   loading = false;
   returnUrl: string;
 
@@ -49,6 +50,8 @@ export class LoginComponent implements OnInit {
 
     },  (err) => {
       this.loading = false;
+      console.log("err", err);
+      this.loginErrorMessage = err.message;
     });
   }
 
