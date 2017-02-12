@@ -10,13 +10,16 @@ import { Product }             from '../../../../models/product.model';
 import { Tag }             from '../../../../models/tag.model';
 import { ProductCategory }             from '../../../../models/product-category.model';
 
+import { RelationManagerService }             from '../../../../services/relation-manager.service';
+
+
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeMap';
-// import 'rxjs/add/operator/forkJoin';
 import 'rxjs/add/operator/take';
 
+const TAG = 'ProductComponent';
 
 @Component({
   selector: 'app-product',
@@ -25,27 +28,13 @@ import 'rxjs/add/operator/take';
 })
 export class ProductComponent implements OnInit {
 
-  loading = true;
+  loading = 'Loading...';
   productObservable: FirebaseObjectObservable<any>;
-  productsTagsObservable: FirebaseObjectObservable<any[]>;
-
-
-
   productCategoryListObservable: FirebaseListObservable<ProductCategory[]>;
-  tagListObservable: FirebaseListObservable<Tag[]>;
 
   productForm: FormGroup;
-  productsTagsForm: FormGroup;
-
   productData: any;
-  productsTags: Array<any>;
-
-  productsTagsData: any;
-  tagsData: Array<any>;
-
   productId: string;
-
-  tagsKeysArray: Array<string>;
 
   firebaseRef: any;
   uploading_thumbnail: boolean;
@@ -56,7 +45,8 @@ export class ProductComponent implements OnInit {
     private router : Router,
     private _location: Location,
     @Inject(FirebaseApp) firebaseApp: any,
-    private fb: FormBuilder)
+    private fb: FormBuilder,
+    private productsTagsRelationsManager: RelationManagerService)
     {
 
     this.firebaseRef = firebaseApp;
@@ -68,11 +58,6 @@ export class ProductComponent implements OnInit {
       diameter: [''],
       price: [''],
       product_category: [''],
-      selectedTag: ['']
-    })
-
-    this.productsTagsForm = this.fb.group({
-      tags: this.fb.array([])
     })
 
   }
@@ -82,58 +67,34 @@ export class ProductComponent implements OnInit {
     this.route.params.take(1).subscribe((params: Params) => {
       this.productId = params['id'];
       this.productObservable = this.af.database.object('/products/'+params['id']);
-      this.productsTagsObservable = this.af.database.object('/productsTags/'+params['id']);
+      this.productCategoryListObservable = this.af.database.list('/product-categories');
     });
 
-    this.tagListObservable = this.af.database.list('/tags');
-    this.productCategoryListObservable = this.af.database.list('/product-categories');
+    this.productObservable.take(1).subscribe(productData => {
+      this.loading = null;
 
+      this.productData = productData;
 
-    Observable.combineLatest([
-      this.productObservable,
-      this.productsTagsObservable,
-      this.tagListObservable,
-      this.productCategoryListObservable]).take(1).subscribe((data)=>{
-
-        this.loading = false;
-        this.productData = data[0];
-        this.productsTagsData = data[1];
-        this.tagsData = data[2];
-
-        this.productForm.setValue({
-          description: this.productData.description,
-          thumbnail_url: this.productData.thumbnail_url,
-          detail: this.productData.detail,
-          diameter: this.productData.diameter,
-          price: this.productData.price,
-          product_category: this.productData.product_category,
-          selectedTag: ''
-        });
-
-        this.productsTags = this.tagsData.filter(tag => this.productsTagsData.hasOwnProperty(tag.$key));
-
+      this.productForm.setValue({
+        description: this.productData.description,
+        thumbnail_url: this.productData.thumbnail_url,
+        detail: this.productData.detail,
+        diameter: this.productData.diameter,
+        price: this.productData.price,
+        product_category: this.productData.product_category,
       });
+
+    });
 
   }
 
-
-
-
-
-
   deleteProduct() {
+    this.loading = "Deleting...";
     this.productObservable.remove().then(item => {
-
-      //Save the relationship data
-      this.productsTagsObservable.remove();
-
-      //Save the revers relationship data
-      for (let tag of this.productsTags){
-        this.af.database.object('/tagsProducts/'+tag.$key+'/' + this.productData.$key).remove();
-      }
-
-    }).then(item => {
-      this._location.back();
+      this.productsTagsRelationsManager.itemDeletedCleanup('productsTags', 'tagsProducts', this.productId).then(()=>{
+        // this.loading = null;
+        this._location.back();
+      });
     })
   }
 
@@ -150,28 +111,16 @@ export class ProductComponent implements OnInit {
       this.productForm.patchValue({
         thumbnail_url: snapshot.downloadURL,
       });
+
+      console.log(TAG, "uploadImage: ",  snapshot.downloadURL);
+
     });
 
-  }
-
-  addTag() {
-
-    let tag_id = this.productForm.get('selectedTag').value;
-    if ((this.productsTags.filter(tag => tag.$key == tag_id).length == 0) && (tag_id.length)){
-      this.productsTags.push(this.tagsData.filter(tag => {
-        return tag.$key == this.productForm.get('selectedTag').value
-      })[0]);
-    }
-  }
-
-  removeTag(tagId) {
-    this.productsTags = this.productsTags.filter(tag => {
-      return !(tag.$key === tagId)
-    });
   }
 
   updateItem() {
 
+    this.loading = 'Saving...';
     //Save the product data
     this.productObservable.set({
 
@@ -184,24 +133,11 @@ export class ProductComponent implements OnInit {
 
     }).then(product => {
 
-      //Save the relationship data
-      let tagsObject = {}
-      for (let tag of this.productsTags){
-        tagsObject[tag.$key] = true;
-      }
-      this.productsTagsObservable.set(tagsObject);
-
-      //Save the revers relationship data
-      for (let tag of this.productsTags){
-        let newEntry = {}
-        newEntry[this.productData.$key] = true;
-        this.af.database.object('/tagsProducts/'+tag.$key).update(newEntry);
-      }
-
-
+      console.log(TAG, "updateItem: ",  this.productForm.getRawValue());
 
     }).then(item => {
-      this._location.back();
+      this.loading = null;
+      // this._location.back();
     })
   }
 

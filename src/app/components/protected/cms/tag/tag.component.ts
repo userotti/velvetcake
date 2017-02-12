@@ -4,6 +4,9 @@ import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'a
 import { Location }                 from '@angular/common';
 import { Subscription }             from 'rxjs';
 
+import { RelationManagerService }             from '../../../../services/relation-manager.service';
+
+
 import 'rxjs/add/operator/switchMap';
 
 @Component({
@@ -24,6 +27,7 @@ export class TagComponent implements OnInit {
     private af: AngularFire,
     private router : Router,
     private _location: Location,
+    private relationManager: RelationManagerService
 
   ) {
 
@@ -41,34 +45,12 @@ export class TagComponent implements OnInit {
     });
 
 
-    // this.productListObservable = this.af.database.list('/products', {
-    //   query: {
-    //     orderByChild : "description",
-    //   }
-    // });
-    //
-    // this.productListObservable.subscribe(items => {
-    //   console.log("products: ", items);
-    //   this.products = items;
-    //   this.selected_product = this.products[0].$key;
-    // });
-
-
   }
 
   deleteItem() {
     this.itemObservable.remove().then(item => {
-      this.af.database.object('/tagsProducts/'+this.item.$key).remove();
 
-      this.af.database.list('/productsTags').take(1).subscribe((productsTags) => {
-          console.log("productsTags: ", productsTags);
-          for (let productTag of productsTags) {
-            if (productTag.hasOwnProperty(this.item.$key)){
-              console.log("this.item.$key: ", this.item.$key);
-              this.af.database.object('/productsTags/'+ productTag.$key + '/' + this.item.$key).remove();
-            }
-          }
-      });
+      this.relationManager.itemDeletedCleanup('tagsProducts', 'productsTags', this.item.$key);
 
     }).then(item => {
       this._location.back();

@@ -33,6 +33,11 @@ import { AddOnComponent } from './components/protected/cms/add-on/add-on.compone
 import { AdjustmentComponent } from './components/protected/cms/adjustment/adjustment.component';
 import { TagsComponent } from './components/protected/cms/tags/tags.component';
 import { TagComponent } from './components/protected/cms/tag/tag.component';
+import { ProductsTagsManagerComponent } from './components/protected/cms/product/products-tags-manager/products-tags-manager.component';
+import { ProductsAdjustmentsManagerComponent } from './components/protected/cms/product/products-adjustments-manager/products-adjustments-manager.component';
+import { ProductsAddOnsManagerComponent } from './components/protected/cms/product/products-add-ons-manager/products-add-ons-manager.component';
+
+import { RelationManagerService } from './services/relation-manager.service';
 
 
 const myFirebaseAuthConfig = {
@@ -61,7 +66,10 @@ const myFirebaseAuthConfig = {
     AddOnComponent,
     AdjustmentComponent,
     TagsComponent,
-    TagComponent
+    TagComponent,
+    ProductsTagsManagerComponent,
+    ProductsAdjustmentsManagerComponent,
+    ProductsAddOnsManagerComponent
 
   ],
   imports: [
@@ -73,7 +81,8 @@ const myFirebaseAuthConfig = {
     RoutingModule
   ],
   providers: [
-    AuthGuard
+    AuthGuard,
+    RelationManagerService
 
   ],
   bootstrap: [AppComponent]

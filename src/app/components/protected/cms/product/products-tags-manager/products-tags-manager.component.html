@@ -1,0 +1,25 @@
+<form #productsTagsForm="ngForm">
+
+  <div  class="form-group row" >
+    <label class="col-3 col-form-label">Tags</label>
+    <div class="col-9">
+
+      <div class="d-flex justify-content-start">
+          <label role="button" class="btn btn-success mr-2" (click)="addTag(productsTagsForm.value.tags)"> Add Tag </label>
+          <select class="form-control" ngModel name="tags">
+             <option value="" disabled >Select a tag</option>
+             <option *ngFor="let tag of tagsAFList | async"
+               [value]="tag.$key">
+                  {{tag.description}}
+             </option>
+          </select>
+      </div>
+
+      <div class="">
+        <label role="button" class="btn btn-primary mr-2" *ngFor="let tag of productTagsAFListPopulated | async" (click)="removeTag(tag.$key)"> {{tag.description}} </label>
+      </div>
+
+    </div>
+  </div>
+
+</form>
