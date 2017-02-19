@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, Inject } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, FormArray }   from '@angular/forms';
-
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable, FirebaseApp } from 'angularfire2';
 import { Location }                 from '@angular/common';
 import { Subscription, Observable }             from 'rxjs';
@@ -11,7 +10,7 @@ import { Tag }             from '../../../../models/tag.model';
 import { ProductCategory }             from '../../../../models/product-category.model';
 
 import { RelationManagerService }             from '../../../../services/relation-manager.service';
-
+import { ProductService }             from '../../../../services/product.service';
 
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/zip';
@@ -29,13 +28,9 @@ const TAG = 'ProductComponent';
 export class ProductComponent implements OnInit {
 
   loading = 'Loading...';
-  productObservable: FirebaseObjectObservable<any>;
   productCategoryListObservable: FirebaseListObservable<ProductCategory[]>;
-
   productForm: FormGroup;
-  productData: any;
-  productId: string;
-
+  product: Product;
   firebaseRef: any;
   uploading_thumbnail: boolean;
 
@@ -46,7 +41,8 @@ export class ProductComponent implements OnInit {
     private _location: Location,
     @Inject(FirebaseApp) firebaseApp: any,
     private fb: FormBuilder,
-    private productsTagsRelationsManager: RelationManagerService)
+    private productsTagsRelationsManager: RelationManagerService,
+    private productService: ProductService)
     {
 
     this.firebaseRef = firebaseApp;
@@ -64,56 +60,51 @@ export class ProductComponent implements OnInit {
 
   ngOnInit() {
 
-    this.route.params.take(1).subscribe((params: Params) => {
-      this.productId = params['id'];
-      this.productObservable = this.af.database.object('/products/'+params['id']);
-      this.productCategoryListObservable = this.af.database.list('/product-categories');
-    });
+    this.route.params.switchMap((params: Params) => {
+      return this.productService.findProductByKey(params['id']);
+    }).take(1).subscribe((product: Product) => {
 
-    this.productObservable.take(1).subscribe(productData => {
       this.loading = null;
-
-      this.productData = productData;
-
-      this.productForm.setValue({
-        description: this.productData.description,
-        thumbnail_url: this.productData.thumbnail_url,
-        detail: this.productData.detail,
-        diameter: this.productData.diameter,
-        price: this.productData.price,
-        product_category: this.productData.product_category,
-      });
+      this.product = product;
+      console.log(this.product);
+      this.productForm.patchValue(this.product);
 
     });
+
+    this.productCategoryListObservable = this.af.database.list('/product-categories');
 
   }
 
   deleteProduct() {
     this.loading = "Deleting...";
-    this.productObservable.remove().then(item => {
-      this.productsTagsRelationsManager.itemDeletedCleanup('productsTags', 'tagsProducts', this.productId).then(()=>{
+    this.productService.deleteProduct(this.product).then(item => {
+      this.productsTagsRelationsManager.itemDeletedCleanup('productsTags', 'tagsProducts', this.product.$key).then(()=>{
         // this.loading = null;
         this._location.back();
       });
+
     })
   }
 
-  uploadImage(event) {
+  uploadImage(imageNamePrefix, file) {
 
     this.uploading_thumbnail = true;
-    let ref = this.firebaseRef.storage().ref().child('images/'+ 'thumbnail-' + this.productId);
+    let ref = this.firebaseRef.storage().ref().child('images/'+ imageNamePrefix + '-' + this.product.$key);
     var metadata = {
       contentType: 'image/jpeg',
     };
 
-    ref.put(event.target.files[0], metadata).then((snapshot) =>{
+    return ref.put(file, metadata);
+
+  }
+
+  uploadThumbnail(event) {
+
+    this.uploadImage('thumbnail', event.target.files[0]).then((snapshot)=>{
       this.uploading_thumbnail = false;
       this.productForm.patchValue({
         thumbnail_url: snapshot.downloadURL,
       });
-
-      console.log(TAG, "uploadImage: ",  snapshot.downloadURL);
-
     });
 
   }
@@ -121,23 +112,10 @@ export class ProductComponent implements OnInit {
   updateItem() {
 
     this.loading = 'Saving...';
-    //Save the product data
-    this.productObservable.set({
-
-      description: this.productForm.get('description').value,
-      thumbnail_url: this.productForm.get('thumbnail_url').value,
-      detail: this.productForm.get('detail').value,
-      diameter: this.productForm.get('diameter').value,
-      price: this.productForm.get('price').value,
-      product_category: this.productForm.get('product_category').value,
-
-    }).then(product => {
-
-      console.log(TAG, "updateItem: ",  this.productForm.getRawValue());
+    this.productService.saveProduct(this.product.$key, this.productForm.value).then(product => {
 
     }).then(item => {
       this.loading = null;
-      // this._location.back();
     })
   }
 

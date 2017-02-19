@@ -37,6 +37,8 @@ export class ProductsTagsManagerComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log("productId: ", this.productId);
+
     this.productTagsAFObject = this.af.database.object('/productsTags/'+this.productId);
     this.tagsProductsAFList = this.af.database.list('/tagsProducts');
     this.tagsAFList = this.af.database.list('/tags');

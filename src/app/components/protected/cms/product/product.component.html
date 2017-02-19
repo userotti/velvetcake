@@ -1,7 +1,7 @@
 <div *ngIf="loading">
   {{ loading }}
 </div>
-<div [hidden]="loading">
+<div *ngIf="!loading">
 
   <div class="d-flex justify-content-between pb-2">
     <button role="button" class="btn btn-primary" [routerLink]="['../']"> Back </button>
@@ -22,7 +22,7 @@
       <label for="thumbnail" class="col-3 col-form-label">Thumbnail</label>
       <div class="col-9">
         <label class="btn btn-primary" role="button" for="my-file-selector">
-            <input id="my-file-selector" (change)="uploadImage($event)" type="file" style="display:none;">
+            <input id="my-file-selector" (change)="uploadThumbnail($event)" type="file" style="display:none;">
             Choose a file
         </label>
         <input type="text" style="display:none;" formControlName="thumbnail_url">
@@ -77,12 +77,16 @@
     </div>
   </form>
 
+  <hr class="mt-5 mb-5">
 
+  <div class="header bold"> <b> Product Images: </b> </div>
+  <app-product-images [productId]="product.$key" [firebaseRef]="firebaseRef" > </app-product-images>
+
+    <hr class="mt-5 mb-5">
   <div class="header bold"> <b> Product relationships: </b> </div>
-  <app-products-tags-manager [productId]="productId" > </app-products-tags-manager>
-  <app-products-adjustments-manager [productId]="productId" > </app-products-adjustments-manager>
-  <app-products-add-ons-manager [productId]="productId" > </app-products-add-ons-manager>
-
+  <app-products-tags-manager [productId]="product.$key" > </app-products-tags-manager>
+  <app-products-adjustments-manager [productId]="product.$key" > </app-products-adjustments-manager>
+  <app-products-add-ons-manager [productId]="product.$key" > </app-products-add-ons-manager>
 
 </div>
 <!-- {{ productForm.value | json}} -->

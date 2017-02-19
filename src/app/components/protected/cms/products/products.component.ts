@@ -3,6 +3,8 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 
 import { Product }             from '../../../../models/product.model';
+import { ProductService }             from '../../../../services/product.service';
+
 
 @Component({
   selector: 'app-products',
@@ -12,43 +14,42 @@ import { Product }             from '../../../../models/product.model';
 export class ProductsComponent implements OnInit {
 
   itemsListObservable: FirebaseListObservable<any[]>;
-  items: any[];
+  products: Product[];
   itemsFiltered: any[];
   isLoading: boolean;
   searchWord: String;
 
-  constructor(private af: AngularFire,private router: Router){
+  constructor(private af: AngularFire,
+              private router: Router,
+              private productService: ProductService){
 
   }
 
   ngOnInit() {
 
     this.isLoading = true;
+    this.searchWord = '';
 
-    this.itemsListObservable = this.af.database.list('/products', {
+    this.productService.findAllProducts({
       query: {
         orderByChild : "description",
       }
-    });
+    }).subscribe(products => {
 
-    this.searchWord = '';
-
-    this.itemsListObservable.subscribe(items => {
-      // console.log("items: ", items);
       this.isLoading = false;
-      this.items = items;
+      this.products = products;
       this.applySearchKeyWord();
-    });
 
+    });
 
   }
 
   applySearchKeyWord() {
 
     if (!this.searchWord.length){
-      this.itemsFiltered = this.items
+      this.itemsFiltered = this.products
     } else {
-      this.itemsFiltered = this.items.filter((item, index) => {
+      this.itemsFiltered = this.products.filter((item, index) => {
         return item.description.toLowerCase().indexOf(this.searchWord.toLowerCase()) > -1;
       });
     }
@@ -56,9 +57,13 @@ export class ProductsComponent implements OnInit {
   }
 
   addNewProduct() {
-    this.itemsListObservable.push(new Product()).then(item => {
+
+    this.productService.createNewProduct().then(item => {
+
       this.router.navigate(['/cms/products', item.key]);
-    })
+
+    });
+
   }
 
   // ngOnDestroy(){

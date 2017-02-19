@@ -38,6 +38,9 @@ import { ProductsAdjustmentsManagerComponent } from './components/protected/cms/
 import { ProductsAddOnsManagerComponent } from './components/protected/cms/product/products-add-ons-manager/products-add-ons-manager.component';
 
 import { RelationManagerService } from './services/relation-manager.service';
+import { ProductService } from './services/product.service';
+import { ProductImagesComponent } from './components/protected/cms/product/product-images/product-images.component';
+
 
 
 const myFirebaseAuthConfig = {
@@ -69,7 +72,8 @@ const myFirebaseAuthConfig = {
     TagComponent,
     ProductsTagsManagerComponent,
     ProductsAdjustmentsManagerComponent,
-    ProductsAddOnsManagerComponent
+    ProductsAddOnsManagerComponent,
+    ProductImagesComponent
 
   ],
   imports: [
@@ -82,7 +86,8 @@ const myFirebaseAuthConfig = {
   ],
   providers: [
     AuthGuard,
-    RelationManagerService
+    RelationManagerService,
+    ProductService
 
   ],
   bootstrap: [AppComponent]

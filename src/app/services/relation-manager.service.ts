@@ -56,6 +56,22 @@ export class RelationManagerService {
 
   }
 
+  //use value null to remove the relations
+  setRelationOnlyOne(firstRelationNodeName, firstKey, secondKey, value):Promise<any> {
+
+    let new_first_relation = {};
+    new_first_relation[secondKey] = value;
+
+
+    return Promise.all([
+      this.af.database.object('/'+ firstRelationNodeName +'/'+firstKey).update(new_first_relation)]).then(()=>{
+        console.log("Relation set to " + value + " successfully: ", {
+          secondRelationNodeName : secondKey
+        })
+      });
+
+  }
+
 
   itemDeletedCleanup(firstRelationNodeName, secondRelationNodeName, firstKey): Promise<any> {
 
