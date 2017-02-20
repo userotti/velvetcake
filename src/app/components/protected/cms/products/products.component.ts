@@ -13,7 +13,6 @@ import { ProductService }             from '../../../../services/product.service
 })
 export class ProductsComponent implements OnInit {
 
-  itemsListObservable: FirebaseListObservable<any[]>;
   products: Product[];
   itemsFiltered: any[];
   isLoading: boolean;
@@ -36,6 +35,7 @@ export class ProductsComponent implements OnInit {
       }
     }).subscribe(products => {
 
+      console.log("Products: ", products);
       this.isLoading = false;
       this.products = products;
       this.applySearchKeyWord();

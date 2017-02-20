@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 
+import { Adjustment }             from '../../../../models/adjustment.model';
+import { AdjustmentService }             from '../../../../services/adjustment.service';
+
 @Component({
   selector: 'app-adjustments',
   templateUrl: './adjustments.component.html',
@@ -9,30 +12,34 @@ import { Router } from '@angular/router';
 })
 export class AdjustmentsComponent implements OnInit {
 
-  items: FirebaseListObservable<any[]>;
-  isLoading: boolean;
+  loading = true;
+  adjustments: Adjustment[];
 
   constructor(
     private af: AngularFire,
-    private router: Router) {
+    private router: Router,
+    private adjustmentService: AdjustmentService) {
 
   }
 
   ngOnInit() {
 
-    this.isLoading = true;
+    this.adjustmentService.findAllAdjustments({
+      query : {
+        orderByChild: 'description'
+      }
+    }).subscribe(adjustments => {
+      this.loading = false;
+      this.adjustments = adjustments
+    })
 
-    this.items = this.af.database.list('/adjustments');
-    this.items.subscribe(complete => {
-            this.isLoading = false;
-        });
 
   }
 
   addNewItem() {
 
-    this.items.push({}).then(item => {
-      this.router.navigate(['/cms/adjustments', item.key]);
+    this.adjustmentService.createNewAdjustment().then(adjustment => {
+      this.router.navigate(['/cms/adjustments', adjustment.key]);
     })
 
   }

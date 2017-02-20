@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 
+import { ProductCategory }             from '../../../../models/product-category.model';
+import { ProductCategoryService }             from '../../../../services/product-category.service';
+
 @Component({
   selector: 'app-product-categories',
   templateUrl: './product-categories.component.html',
@@ -9,12 +12,13 @@ import { Router } from '@angular/router';
 })
 export class ProductCategoriesComponent implements OnInit {
 
-  items: FirebaseListObservable<any[]>;
+  productCategories: ProductCategory[];
   isLoading: boolean;
 
   constructor(
     private af: AngularFire,
-    private router: Router) {
+    private router: Router,
+    private productCategoryService: ProductCategoryService) {
 
   }
 
@@ -22,17 +26,21 @@ export class ProductCategoriesComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.items = this.af.database.list('/product-categories');
-    this.items.subscribe(complete => {
-            this.isLoading = false;
-        });
+    this.productCategoryService.findAllProductCategories({
+      query: {
+        orderByChild : "description",
+      }
+    }).subscribe(categories =>{
+      this.isLoading = false;
+      this.productCategories = categories;
+    })
 
   }
 
   addNewItem() {
 
-    this.items.push({}).then(item => {
-      this.router.navigate(['/cms/product-categories', item.key]);
+    this.productCategoryService.createNewProductCategory().then(category => {
+      this.router.navigate(['/cms/product-categories', category.key]);
     })
 
   }

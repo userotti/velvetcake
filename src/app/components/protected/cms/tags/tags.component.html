@@ -7,6 +7,6 @@
 
 <div *ngIf="!isLoading">
   <ul class="list-group">
-    <a *ngFor="let item of items | async" [routerLink]="[item.$key]" class="list-group-item list-group-item-action">{{ item.description }}</a>
+    <a *ngFor="let tag of tags" [routerLink]="[tag.$key]" class="list-group-item list-group-item-action">{{ tag.description }}</a>
   </ul>
 </div>

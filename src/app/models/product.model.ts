@@ -1,6 +1,5 @@
 export class Product {
 
-
     constructor(
         public $key:string,
         public description: string,
@@ -11,8 +10,6 @@ export class Product {
         public product_category: string) {
 
     }
-
-
 
     static fromJsonList(array): Product[] {
         return array.map(Product.fromJson);
@@ -35,8 +32,5 @@ export class Product {
         price,
         product_category);
     }
-
-
-
 
 }

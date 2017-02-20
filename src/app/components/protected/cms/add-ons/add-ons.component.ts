@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
 
+import { AddOn }             from '../../../../models/add-on.model';
+import { AddOnService }             from '../../../../services/add-on.service';
+
 @Component({
   selector: 'app-add-ons',
   templateUrl: './add-ons.component.html',
@@ -9,30 +12,34 @@ import { Router } from '@angular/router';
 })
 export class AddOnsComponent implements OnInit {
 
-  items: FirebaseListObservable<any[]>;
-  isLoading: boolean;
+  loading = true;
+  addOns: AddOn[];
 
   constructor(
     private af: AngularFire,
-    private router: Router) {
+    private router: Router,
+    private addOnService: AddOnService) {
 
   }
 
   ngOnInit() {
 
-    this.isLoading = true;
+    this.addOnService.findAllAddOns({
+      query : {
+        orderByChild: 'description'
+      }
+    }).subscribe(addOns => {
+      this.loading = false;
+      this.addOns = addOns
+    })
 
-    this.items = this.af.database.list('/add-ons');
-    this.items.subscribe(complete => {
-            this.isLoading = false;
-        });
 
   }
 
   addNewItem() {
 
-    this.items.push({}).then(item => {
-      this.router.navigate(['/cms/add-ons', item.key]);
+    this.addOnService.createNewAddOn().then(addOn => {
+      this.router.navigate(['/cms/add-ons', addOn.key]);
     })
 
   }

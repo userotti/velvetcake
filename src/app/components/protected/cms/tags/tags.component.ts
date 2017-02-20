@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import { AngularFire } from 'angularfire2';
 import { Router } from '@angular/router';
+
+import { Tag }             from '../../../../models/tag.model';
+import { TagService }             from '../../../../services/tag.service';
 
 
 @Component({
@@ -11,32 +14,40 @@ import { Router } from '@angular/router';
 })
 export class TagsComponent implements OnInit {
 
-  items: FirebaseListObservable<any[]>;
+  tags: Tag[];
   isLoading: boolean;
 
   constructor(
     private af: AngularFire,
-    private router: Router) {
+    private router: Router,
+    private tagService: TagService) {
+
+    }
+
+    ngOnInit() {
+
+      this.isLoading = true;
+
+      this.tagService.findAllTags({
+        query: {
+          orderByChild : "description",
+        }
+      }).take(1).subscribe(tags => {
+        console.log("Tags", tags);
+        this.isLoading = false;
+        this.tags = tags
+      });
+
+    }
+
+    addNewItem() {
+
+      this.tagService.createNewTag().then(tag => {
+
+        this.router.navigate(['/cms/tags', tag.key]);
+
+      });
+
+    }
 
   }
-
-  ngOnInit() {
-
-    this.isLoading = true;
-
-    this.items = this.af.database.list('/tags');
-    this.items.subscribe(complete => {
-            this.isLoading = false;
-        });
-
-  }
-
-  addNewItem() {
-
-    this.items.push({}).then(item => {
-      this.router.navigate(['/cms/tags', item.key]);
-    })
-
-  }
-
-}

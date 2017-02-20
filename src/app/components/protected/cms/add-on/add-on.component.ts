@@ -1,8 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 import { Location }                 from '@angular/common';
 import { Subscription }             from 'rxjs';
+
+
+import { AddOn }             from '../../../../models/add-on.model';
+import { AddOnService }             from '../../../../services/add-on.service';
+
 
 @Component({
   selector: 'app-add-on',
@@ -12,55 +19,53 @@ import { Subscription }             from 'rxjs';
 export class AddOnComponent implements OnInit {
 
 
-    itemObservable: FirebaseObjectObservable<any[]>;
-    subscription: Subscription;
-    product_id: String;
-    item: any;
+  loading = true;
+  addOn: AddOn;
+  form: FormGroup;
 
-    constructor(
-      private route: ActivatedRoute,
-      private af: AngularFire,
-      private router : Router,
-      private _location: Location
-    ) {
+  constructor(
+    private route: ActivatedRoute,
+    private af: AngularFire,
+    private router : Router,
+    private _location: Location,
+    private addOnService: AddOnService,
+    private fb: FormBuilder,
+  ) {
 
-
-    }
-
-    ngOnInit() {
-
-      this.item = {}
-
-      this.subscription = this.route.params.switchMap((params: Params) => {
-        this.product_id = params['id']
-        return this.itemObservable = this.af.database.object('/add-ons/'+params['id'])
-      }).subscribe((item) => {
-        this.item = item;
-      });
-
-
-    }
-
-    deleteItem() {
-      this.itemObservable.remove().then(item => {
-        this._location.back();
-      })
-    }
-
-    updateItem() {
-      console.log('UPDATING: this.item: ', this.item);
-      this.itemObservable.update({
-
-        description: this.item.description,
-        price: this.item.price,
-
-      }).then(item => {
-        this._location.back();
-      })
-    }
-
-    ngOnDestroy(){
-      this.subscription.unsubscribe();
-    }
+    this.form = this.fb.group({
+      description: '',
+      price: ''
+    })
 
   }
+
+  ngOnInit() {
+
+    this.route.params.switchMap((params: Params) => {
+      return this.addOnService.findAddOnByKey(params['id']);
+    }).take(1).subscribe((addOn: AddOn) => {
+      this.loading = null;
+      this.addOn = addOn;
+
+      console.log("this.addOn: ", this.addOn);
+      this.form.patchValue(addOn);
+    });
+
+  }
+
+  deleteItem() {
+    this.addOnService.deleteAddOn(this.addOn).then(item => {
+      this._location.back();
+    });
+  }
+
+  updateItem() {
+
+    this.addOn.patchValues(this.form.value);
+    this.addOnService.saveAddOn(this.addOn).then(() => {
+      this._location.back();
+    });
+
+  }
+
+}

@@ -41,7 +41,7 @@ export class ProductComponent implements OnInit {
     private _location: Location,
     @Inject(FirebaseApp) firebaseApp: any,
     private fb: FormBuilder,
-    private productsTagsRelationsManager: RelationManagerService,
+    private relationsManager: RelationManagerService,
     private productService: ProductService)
     {
 
@@ -78,7 +78,8 @@ export class ProductComponent implements OnInit {
   deleteProduct() {
     this.loading = "Deleting...";
     this.productService.deleteProduct(this.product).then(item => {
-      this.productsTagsRelationsManager.itemDeletedCleanup('productsTags', 'tagsProducts', this.product.$key).then(()=>{
+
+      this.relationsManager.itemDeletedCleanup('productsTags', 'tagsProducts', this.product.$key).then(()=>{
         // this.loading = null;
         this._location.back();
       });

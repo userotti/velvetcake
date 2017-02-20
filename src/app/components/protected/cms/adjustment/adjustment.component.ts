@@ -1,8 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
 import { Location }                 from '@angular/common';
 import { Subscription }             from 'rxjs';
+
+import { Adjustment }             from '../../../../models/adjustment.model';
+import { AdjustmentService }             from '../../../../services/adjustment.service';
+
 
 @Component({
   selector: 'app-adjustment',
@@ -11,54 +16,51 @@ import { Subscription }             from 'rxjs';
 })
 export class AdjustmentComponent implements OnInit {
 
-    itemObservable: FirebaseObjectObservable<any[]>;
-    subscription: Subscription;
-    product_id: String;
-    item: any;
+  loading = true;
+  adjustment: Adjustment;
+  form: FormGroup;
 
-    constructor(
-      private route: ActivatedRoute,
-      private af: AngularFire,
-      private router : Router,
-      private _location: Location
-    ) {
+  constructor(
+    private route: ActivatedRoute,
+    private af: AngularFire,
+    private router : Router,
+    private _location: Location,
+    private adjustmentService: AdjustmentService,
+    private fb: FormBuilder,
+  ) {
 
-
-    }
-
-    ngOnInit() {
-
-      this.item = {}
-
-      this.subscription = this.route.params.switchMap((params: Params) => {
-        this.product_id = params['id']
-        return this.itemObservable = this.af.database.object('/adjustments/'+params['id'])
-      }).subscribe((item) => {
-        this.item = item;
-      });
-
-
-    }
-
-    deleteItem() {
-      this.itemObservable.remove().then(item => {
-        this._location.back();
-      })
-    }
-
-    updateItem() {
-      console.log('UPDATING: this.item: ', this.item);
-      this.itemObservable.update({
-
-        description: this.item.description,
-
-      }).then(item => {
-        this._location.back();
-      })
-    }
-
-    ngOnDestroy(){
-      this.subscription.unsubscribe();
-    }
+    this.form = this.fb.group({
+      description: '',
+      detail: ''
+    })
 
   }
+
+  ngOnInit() {
+
+    this.route.params.switchMap((params: Params) => {
+      return this.adjustmentService.findAdjustmentByKey(params['id']);
+    }).take(1).subscribe((adjustment: Adjustment) => {
+      this.loading = null;
+      this.adjustment = adjustment;
+      this.form.patchValue(adjustment);
+    });
+
+  }
+
+  deleteItem() {
+    this.adjustmentService.deleteAdjustment(this.adjustment).then(item => {
+      this._location.back();
+    });
+  }
+
+  updateItem() {
+
+    this.adjustment.patchValues(this.form.value);
+    this.adjustmentService.saveAdjustment(this.adjustment).then(() => {
+      this._location.back();
+    });
+
+  }
+
+}

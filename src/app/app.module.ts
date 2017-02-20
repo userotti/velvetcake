@@ -36,11 +36,14 @@ import { TagComponent } from './components/protected/cms/tag/tag.component';
 import { ProductsTagsManagerComponent } from './components/protected/cms/product/products-tags-manager/products-tags-manager.component';
 import { ProductsAdjustmentsManagerComponent } from './components/protected/cms/product/products-adjustments-manager/products-adjustments-manager.component';
 import { ProductsAddOnsManagerComponent } from './components/protected/cms/product/products-add-ons-manager/products-add-ons-manager.component';
+import { ProductImagesComponent } from './components/protected/cms/product/product-images/product-images.component';
 
 import { RelationManagerService } from './services/relation-manager.service';
 import { ProductService } from './services/product.service';
-import { ProductImagesComponent } from './components/protected/cms/product/product-images/product-images.component';
-
+import { TagService } from './services/tag.service';
+import { ProductCategoryService } from './services/product-category.service';
+import { AdjustmentService } from './services/adjustment.service';
+import { AddOnService } from './services/add-on.service';
 
 
 const myFirebaseAuthConfig = {
@@ -87,7 +90,11 @@ const myFirebaseAuthConfig = {
   providers: [
     AuthGuard,
     RelationManagerService,
-    ProductService
+    ProductService,
+    TagService,
+    ProductCategoryService,
+    AdjustmentService,
+    AddOnService,
 
   ],
   bootstrap: [AppComponent]
