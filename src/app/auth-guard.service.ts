@@ -9,7 +9,7 @@ import { AngularFire } from 'angularfire2';
 @Injectable()
 export class AuthGuard implements CanActivate{
   public allowed: boolean;
- 
+
   constructor(private af: AngularFire, private router: Router) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate{
         this.router.navigate(['/login']);
         return false;
       } else {
+
         return true;
       }
     }).first()

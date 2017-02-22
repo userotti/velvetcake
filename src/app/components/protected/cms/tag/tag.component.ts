@@ -1,10 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+
+
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2';
 import { Location }                 from '@angular/common';
 import { Subscription }             from 'rxjs';
 
 import { RelationManagerService }             from '../../../../services/relation-manager.service';
+
+import { Tag }             from '../../../../models/tag.model';
+import { TagService }             from '../../../../services/tag.service';
 
 
 import 'rxjs/add/operator/switchMap';
@@ -16,70 +22,61 @@ import 'rxjs/add/operator/switchMap';
 })
 export class TagComponent implements OnInit {
 
-  itemObservable: FirebaseObjectObservable<any[]>;
-  subscription: Subscription;
-  item: any;
-  selected_product: any;
-  products: any[];
+  loading = true;
+  tag: Tag;
+  form: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private af: AngularFire,
     private router : Router,
     private _location: Location,
-    private relationManager: RelationManagerService
+    private relationManager: RelationManagerService,
+    private tagService: TagService,
+    private fb: FormBuilder
 
   ) {
+
+    this.form = this.fb.group({
+      description: '',
+      price: ''
+    })
 
   }
 
   ngOnInit() {
 
-    this.item = {};
-    this.products = [];
+    this.route.params.switchMap((params: Params) => {
+      return this.tagService.findTagByKey(params['id']);
+    }).take(1).subscribe((tag: Tag) => {
+      this.loading = null;
+      this.tag = tag;
 
-    this.subscription = this.route.params.switchMap((params: Params) => {
-      return this.itemObservable = this.af.database.object('/tags/'+params['id'])
-    }).subscribe((item) => {
-      this.item = item;
+      console.log("this.addOn: ", this.tag);
+      this.form.patchValue(tag);
+    });
+
+  }
+
+  deleteItem() {
+
+    this.tagService.deleteTag(this.tag).then(() => {
+
+      this.relationManager.itemDeletedCleanup('tagsProducts', 'productsTags', this.tag.$key);
+      this._location.back();
     });
 
 
   }
 
-  deleteItem() {
-    this.itemObservable.remove().then(item => {
-
-      this.relationManager.itemDeletedCleanup('tagsProducts', 'productsTags', this.item.$key);
-
-    }).then(item => {
-      this._location.back();
-    })
-  }
-
   updateItem() {
-    console.log('UPDATING: this.item: ', this.item);
 
+    this.tag.patchValues(this.form.value);
 
-    this.itemObservable.update({
-
-      description: this.item.description,
-
-
-    }).then(item => {
+    this.tagService.saveTag(this.tag).then(() => {
       this._location.back();
-    })
-  }
+    });
 
-
-  listProducts() {
-    // this.products.map((product, index)=>{
-    //   if
-    // })
-  }
-
-  ngOnDestroy(){
-    this.subscription.unsubscribe();
   }
 
 

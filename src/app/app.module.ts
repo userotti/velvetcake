@@ -44,6 +44,10 @@ import { TagService } from './services/tag.service';
 import { ProductCategoryService } from './services/product-category.service';
 import { AdjustmentService } from './services/adjustment.service';
 import { AddOnService } from './services/add-on.service';
+import { ViewOrdersComponent } from './components/protected/orders/view-orders/view-orders.component';
+import { CreateOrderComponent } from './components/protected/orders/create-order/create-order.component';
+import { ViewOrderComponent } from './components/protected/orders/view-order/view-order.component';
+import { ProfileComponent } from './components/protected/profile/profile.component';
 
 
 const myFirebaseAuthConfig = {
@@ -76,7 +80,11 @@ const myFirebaseAuthConfig = {
     ProductsTagsManagerComponent,
     ProductsAdjustmentsManagerComponent,
     ProductsAddOnsManagerComponent,
-    ProductImagesComponent
+    ProductImagesComponent,
+    ViewOrdersComponent,
+    CreateOrderComponent,
+    ViewOrderComponent,
+    ProfileComponent
 
   ],
   imports: [

@@ -22,8 +22,9 @@ export class TagService {
             .map(Tag.fromJsonList);
   }
 
-  findTagByKey(key):FirebaseObjectObservable<Tag> {
-    return this.af.database.object('/tags/'+key);
+  findTagByKey(key):Observable<Tag> {
+    return this.af.database.object('/tags/'+key)
+            .map(Tag.fromJson);;
   }
 
 
@@ -35,10 +36,10 @@ export class TagService {
     return this.af.database.list('/tags').remove(tag.$key);
   }
 
-  saveTag(key, tag: any): firebase.Promise<void>  {
+  saveTag(tag: Tag): firebase.Promise<void>  {
     //remove undefined keys
-    Object.keys(tag).forEach(key => tag[key] === undefined && delete tag[key]);
-    return this.af.database.object('/tags/'+key).update(tag);
+
+    return this.af.database.object('/tags/'+tag.$key).update(tag.toStrippedJson());
 
   }
 

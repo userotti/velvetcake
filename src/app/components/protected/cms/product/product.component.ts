@@ -47,6 +47,8 @@ export class ProductComponent implements OnInit {
 
     this.firebaseRef = firebaseApp;
 
+    console.log("this.firebaseRef: ", this.firebaseRef);
+
     this.productForm = this.fb.group({
       description: ['', [Validators.required]],
       thumbnail_url: [''],

@@ -1,0 +1,41 @@
+
+<form (ngSubmit)="updateProfile()" [formGroup]="profileForm">
+
+  <div class="form-group row" name="form">
+    <label for="description" class="col-3 col-form-label">Email</label>
+    <div class="col-9">
+      <input class="form-control" name="description" type="text" formControlName="email" disabled>
+    </div>
+  </div>
+
+  <div class="form-group row" name="form">
+    <label for="description" class="col-3 col-form-label">Display Name</label>
+    <div class="col-9">
+      <input class="form-control" name="detail" type="text" formControlName="displayName">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="photourl" class="col-3 col-form-label">Profile Pic</label>
+    <div class="col-9">
+      <label class="btn btn-primary" role="button" for="my-file-selector">
+        <input id="my-file-selector" (change)="uploadProfilePic($event)" type="file" style="display:none;">
+        Choose a file
+      </label>
+      <input type="text" name="photourl" style="display:none;" formControlName="photoUrl">
+      <img *ngIf="uploading_profile_pic" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+
+      <div *ngIf="profileForm.get('photoUrl').value">
+        <img  class="img-fluid img-thumbnail" [src]="profileForm.get('photoUrl').value" />
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <div class="d-flex justify-content-end pt-4">
+    <button type="submit"  role="button" class="btn btn-success" > Save </button>
+  </div>
+
+</form>
