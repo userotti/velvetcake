@@ -10,19 +10,13 @@ import { AngularFireModule, AuthProviders, AuthMethods, FirebaseApp } from 'angu
 import { firebaseConfig } from '../environments/firebase.config'
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { LoginComponent } from './components/login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-
 import { AuthGuard } from './auth-guard.service';
 import { ProtectedComponent } from './components/protected/protected.component';
-
 import { OrdersComponent } from './components/protected/orders/orders.component';
 import { ReportsComponent } from './components/protected/reports/reports.component';
 import { CmsComponent } from './components/protected/cms/cms.component';
-
-
 import { ProductsComponent } from './components/protected/cms/products/products.component';
 import { ProductCategoriesComponent } from './components/protected/cms/product-categories/product-categories.component';
 import { ProductComponent } from './components/protected/cms/product/product.component';
@@ -45,9 +39,14 @@ import { ProductCategoryService } from './services/product-category.service';
 import { AdjustmentService } from './services/adjustment.service';
 import { AddOnService } from './services/add-on.service';
 import { ViewOrdersComponent } from './components/protected/orders/view-orders/view-orders.component';
-import { CreateOrderComponent } from './components/protected/orders/create-order/create-order.component';
 import { ViewOrderComponent } from './components/protected/orders/view-order/view-order.component';
 import { ProfileComponent } from './components/protected/profile/profile.component';
+import { ShopComponent } from './components/protected/shop/shop.component';
+import { ProductsListingComponent } from './components/protected/shop/products-listing/products-listing.component';
+import { AddProductComponent } from './components/protected/shop/add-product/add-product.component';
+import { FinilizeOrderComponent } from './components/protected/shop/finilize-order/finilize-order.component';
+import { CheckoutComponent } from './components/protected/shop/checkout/checkout.component';
+import { ListingItemComponent } from './components/protected/shop/products-listing/listing-item/listing-item.component';
 
 
 const myFirebaseAuthConfig = {
@@ -59,10 +58,8 @@ const myFirebaseAuthConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     WelcomeComponent,
     LoginComponent,
-    DashboardComponent,
     ProtectedComponent,
     CmsComponent,
     ReportsComponent,
@@ -82,9 +79,14 @@ const myFirebaseAuthConfig = {
     ProductsAddOnsManagerComponent,
     ProductImagesComponent,
     ViewOrdersComponent,
-    CreateOrderComponent,
     ViewOrderComponent,
-    ProfileComponent
+    ProfileComponent,
+    ShopComponent,
+    ProductsListingComponent,
+    AddProductComponent,
+    FinilizeOrderComponent,
+    CheckoutComponent,
+    ListingItemComponent
 
   ],
   imports: [

@@ -19,7 +19,8 @@
       "mobile": false,
       "styles": [
         "styles.css",
-        "custom-bootstrap.scss"
+        "custom-bootstrap.scss",
+        "../node_modules/font-awesome/css/font-awesome.css"
 
       ],
       "scripts": [

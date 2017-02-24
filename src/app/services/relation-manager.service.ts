@@ -28,9 +28,13 @@ export class RelationManagerService {
   populateRelationWith(firstRelationNodeName, fromNodeName, firstKey) : Observable<any[]> {
 
     return this.af.database.object('/'+firstRelationNodeName+'/'+firstKey)
-    .switchMap(productsTagsObject => {
-      return this.af.database.list('/'+fromNodeName).map((tags, index) => {
-        return tags.filter(tag => productsTagsObject.hasOwnProperty(tag.$key))
+    .switchMap(firstFromNodeObject => {
+
+      console.log("firstFromNodeObject: ", firstFromNodeObject)
+      return this.af.database.list('/'+fromNodeName).map((items, index) => {
+
+        console.log("items.filter(item => firstFromNodeObject.hasOwnProperty(item.$key): ", items.filter(item => firstFromNodeObject.hasOwnProperty(item.$key)));
+        return items.filter(item => firstFromNodeObject.hasOwnProperty(item.$key))
       })
     })
 
