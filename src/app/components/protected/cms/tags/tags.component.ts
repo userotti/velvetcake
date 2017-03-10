@@ -32,7 +32,7 @@ export class TagsComponent implements OnInit {
         query: {
           orderByChild : "description",
         }
-      }).take(1).subscribe(tags => {
+      }).subscribe(tags => {
         console.log("Tags", tags);
         this.isLoading = false;
         this.tags = tags
