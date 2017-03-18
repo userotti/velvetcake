@@ -21,6 +21,8 @@ import { ViewOrderComponent } from './components/protected/orders/view-order/vie
 
 import { ShopComponent } from './components/protected/shop/shop.component';
 import { ProductsListingComponent } from './components/protected/shop/products-listing/products-listing.component';
+import { AddProductComponent } from './components/protected/shop/add-product/add-product.component';
+
 
 import { ProfileComponent } from './components/protected/profile/profile.component';
 import { OrdersComponent } from './components/protected/orders/orders.component';
@@ -39,10 +41,14 @@ const routes: Routes = [
     children: [
       { path: 'profile',  component: ProfileComponent},
       { path: 'shop',
+
         component: ShopComponent,
         children: [
+          { path: '', redirectTo: '/shop/products-listing', pathMatch: 'full' },
           { path: 'products-listing',  component: ProductsListingComponent},
+          { path: 'add-product/:id',  component: AddProductComponent},
         ],
+
       },
       { path: 'orders',
         component: OrdersComponent,
@@ -55,6 +61,7 @@ const routes: Routes = [
       { path: 'cms',
         component: CmsComponent,
         children: [
+          { path: '', redirectTo: '/cms/products', pathMatch: 'full' },
           { path: 'products',  component: ProductsComponent},
           { path: 'products/:id',  component: ProductComponent},
           { path: 'product-categories',  component: ProductCategoriesComponent},

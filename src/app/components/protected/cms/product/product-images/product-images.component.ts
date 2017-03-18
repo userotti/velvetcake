@@ -39,9 +39,9 @@ export class ProductImagesComponent implements OnInit {
 
     console.log("productId: ", this.productId);
 
-    this.productImagesAFObject = this.af.database.object('/productImages/'+this.productId);
+    this.productImagesAFObject = this.af.database.object('/productsImages/'+this.productId);
     this.imagesAFList = this.af.database.list('/images');
-    this.productImagesAFListPopulated = this.relationsManager.populateRelationWith('productImages', 'images', this.productId);
+    this.productImagesAFListPopulated = this.relationsManager.populateRelationWith('productsImages', 'images', this.productId);
 
   }
 
@@ -75,7 +75,7 @@ export class ProductImagesComponent implements OnInit {
           console.log("image record updated: ", newImage.key);
 
           if (newImage.key){
-            this.relationsManager.setRelationOnlyOne('productImages', this.productId, newImage.key, true).then(()=>{
+            this.relationsManager.setRelationOnlyOne('productsImages', this.productId, newImage.key, true).then(()=>{
               console.log("done");
               this.uploading_image = false;
             });
@@ -93,7 +93,7 @@ export class ProductImagesComponent implements OnInit {
   removeImage(imageKey) {
 
     this.af.database.object('/images/'+imageKey).remove().then(()=>{
-      this.relationsManager.setRelationOnlyOne('productImages', this.productId, imageKey, null).then(()=>{
+      this.relationsManager.setRelationOnlyOne('productsImages', this.productId, imageKey, null).then(()=>{
         console.log("done");
       });
     });

@@ -1,3 +1,38 @@
-<p>
-  add-product works!
-</p>
+<div *ngIf="orderLine">
+  <div class="row">
+    <div class="col-6">
+      <app-image-viewer [productId]="product.$key"> </app-image-viewer>
+    </div>
+
+    <div class="col-6">
+      <img [src]="product.thumbnail_url" class="detail-image mb-2" >
+
+      <div class="d-flex heading-container">
+        <h4> {{product.description}} </h4>
+        <h4> R {{product.price}} </h4>
+      </div>
+      <p> {{product.detail}} </p>
+      <span> Diameter: <b>{{product.diameter}} </b> cm </span>
+
+      <div>
+        <form (ngSubmit)="addOrderLine()" [formGroup]="orderLineForm">
+
+          <div class="p-3 mt-3 card light-background">
+            <div class="form-group row">
+              <label for="quantity" class="col-3 col-form-label">Quantity</label>
+              <div class="col-3">
+                <input class="form-control" name="description" type="text" formControlName="quantity">
+              </div>
+            </div>
+
+            <app-order-line-adjustments-manager [productId]="product.$key" [orderLineId]="orderLine.$key"> </app-order-line-adjustments-manager>
+            <app-order-line-add-ons-manager [productId]="product.$key" [orderLineId]="orderLine.$key"> </app-order-line-add-ons-manager>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -3,10 +3,14 @@
   <button role="button" class="btn btn-success" (click)="addNewItem()" > + Add new add on </button>
 </div>
 
-<div *ngIf="loading">Loading data...</div>
 
-<div *ngIf="!loading">
+<div >
   <ul class="list-group">
-    <a *ngFor="let addOn of addOns" [routerLink]="[addOn.$key]" class="list-group-item list-group-item-action">{{ addOn.description }}</a>
+    <a *ngFor="let addOn of addOns$ | async" [routerLink]="[addOn.$key]" class="list-group-item list-group-item-action">{{ addOn.description }}</a>
   </ul>
+
+
+  <div *ngIf="(addOns$ | async)?.length==0">No items found.</div>
+
+
 </div>

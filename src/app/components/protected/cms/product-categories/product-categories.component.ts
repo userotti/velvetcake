@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
+import { Subscription, Observable }             from 'rxjs';
 
 import { ProductCategory }             from '../../../../models/product-category.model';
 import { ProductCategoryService }             from '../../../../services/product-category.service';
@@ -12,8 +13,7 @@ import { ProductCategoryService }             from '../../../../services/product
 })
 export class ProductCategoriesComponent implements OnInit {
 
-  productCategories: ProductCategory[];
-  isLoading: boolean;
+  productCategories$: Observable<ProductCategory[]>;
 
   constructor(
     private af: AngularFire,
@@ -24,16 +24,11 @@ export class ProductCategoriesComponent implements OnInit {
 
   ngOnInit() {
 
-    this.isLoading = true;
-
-    this.productCategoryService.findAllProductCategories({
+    this.productCategories$ = this.productCategoryService.findAllProductCategories({
       query: {
         orderByChild : "description",
       }
-    }).subscribe(categories =>{
-      this.isLoading = false;
-      this.productCategories = categories;
-    })
+    });
 
   }
 

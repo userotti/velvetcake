@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
+import { Subscription, Observable }             from 'rxjs';
 
 import { Adjustment }             from '../../../../models/adjustment.model';
 import { AdjustmentService }             from '../../../../services/adjustment.service';
@@ -12,8 +13,7 @@ import { AdjustmentService }             from '../../../../services/adjustment.s
 })
 export class AdjustmentsComponent implements OnInit {
 
-  loading = true;
-  adjustments: Adjustment[];
+  adjustments$: Observable<Adjustment[]>;
 
   constructor(
     private af: AngularFire,
@@ -24,13 +24,10 @@ export class AdjustmentsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.adjustmentService.findAllAdjustments({
+    this.adjustments$ = this.adjustmentService.findAllAdjustments({
       query : {
         orderByChild: 'description'
       }
-    }).subscribe(adjustments => {
-      this.loading = false;
-      this.adjustments = adjustments
     })
 
 

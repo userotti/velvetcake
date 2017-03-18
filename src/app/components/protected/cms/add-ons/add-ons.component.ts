@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
+import { Subscription, Observable }             from 'rxjs';
 
 import { AddOn }             from '../../../../models/add-on.model';
 import { AddOnService }             from '../../../../services/add-on.service';
@@ -12,8 +13,7 @@ import { AddOnService }             from '../../../../services/add-on.service';
 })
 export class AddOnsComponent implements OnInit {
 
-  loading = true;
-  addOns: AddOn[];
+  addOns$: Observable<AddOn[]>;
 
   constructor(
     private af: AngularFire,
@@ -24,15 +24,11 @@ export class AddOnsComponent implements OnInit {
 
   ngOnInit() {
 
-    this.addOnService.findAllAddOns({
+    this.addOns$ = this.addOnService.findAllAddOns({
       query : {
         orderByChild: 'description'
       }
-    }).subscribe(addOns => {
-      this.loading = false;
-      this.addOns = addOns
-    })
-
+    });
 
   }
 

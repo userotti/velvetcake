@@ -1,15 +1,14 @@
 <div class="cms-section">
-  <div class="row">
+  <div class="row" *ngIf="(tags$ | async)?.length">
     <div class="side-menu-section col-3" >
-      <div *ngIf="tags">
+      <div>
         <nav class="navbar navbar-inverse bg-primary rounded">
           <ul class="navbar-nav flex-column">
 
 
-            <li class="nav-item"  *ngFor="let tag of tags" >
-              <a class="nav-link" role="button" (click)="setSelectedTag(tag)" >{{tag.description}}</a>
+            <li class="nav-item"  *ngFor="let tag of tags$ | async" >
+              <a class="nav-link" [class.active]="tag==selectedTag" role="button" (click)="selectTag(tag)" >{{tag.description}}</a>
             </li>
-
 
 
           </ul>
@@ -19,9 +18,8 @@
     </div>
 
     <div class="list-section col-9">
-      <span *ngIf="selectedTag"> {{selectedTag.description}}: </span>
-      <div *ngIf="products" class="d-flex p-2 justify-content-start products-listing-flex-contianer">
-         <app-listing-item class="p-4 flex-wrap products-listing-flex-item" *ngFor="let product of products" [product]="product"> </app-listing-item>
+      <div class="d-flex justify-content-start products-listing-flex-contianer">
+         <app-listing-item class="flex-wrap products-listing-flex-item" *ngFor="let product of products$ | async" [product]="product" (onClick)="gotoProduct($event)"> </app-listing-item>
       </div>
     </div>
 </div>

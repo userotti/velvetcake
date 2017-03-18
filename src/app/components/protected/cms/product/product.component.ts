@@ -11,6 +11,9 @@ import { ProductCategory }             from '../../../../models/product-category
 
 import { RelationManagerService }             from '../../../../services/relation-manager.service';
 import { ProductService }             from '../../../../services/product.service';
+import { ProductCategoryService }             from '../../../../services/product-category.service';
+
+
 
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/zip';
@@ -28,7 +31,7 @@ const TAG = 'ProductComponent';
 export class ProductComponent implements OnInit {
 
   loading = 'Loading...';
-  productCategoryListObservable: FirebaseListObservable<ProductCategory[]>;
+  productCategories$: Observable<ProductCategory[]>;
   productForm: FormGroup;
   product: Product;
   firebaseRef: any;
@@ -36,7 +39,7 @@ export class ProductComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private af: AngularFire,
+    private productCategoryService: ProductCategoryService,
     private router : Router,
     private _location: Location,
     @Inject(FirebaseApp) firebaseApp: any,
@@ -47,7 +50,7 @@ export class ProductComponent implements OnInit {
 
     this.firebaseRef = firebaseApp;
 
-    console.log("this.firebaseRef: ", this.firebaseRef);
+    console.log(ProductComponent.name, "constructor" );
 
     this.productForm = this.fb.group({
       description: ['', [Validators.required]],
@@ -73,8 +76,7 @@ export class ProductComponent implements OnInit {
 
     });
 
-    this.productCategoryListObservable = this.af.database.list('/product-categories');
-
+    this.productCategories$ = this.productCategoryService.findAllProductCategories({});
   }
 
   deleteProduct() {

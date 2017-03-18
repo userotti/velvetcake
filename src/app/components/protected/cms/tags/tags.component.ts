@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AngularFire } from 'angularfire2';
 import { Router } from '@angular/router';
+import { Subscription, Observable }             from 'rxjs';
 
 import { Tag }             from '../../../../models/tag.model';
 import { TagService }             from '../../../../services/tag.service';
@@ -14,8 +15,7 @@ import { TagService }             from '../../../../services/tag.service';
 })
 export class TagsComponent implements OnInit {
 
-  tags: Tag[];
-  isLoading: boolean;
+  tags$: Observable<Tag[]>;
 
   constructor(
     private af: AngularFire,
@@ -26,18 +26,11 @@ export class TagsComponent implements OnInit {
 
     ngOnInit() {
 
-      this.isLoading = true;
-
-      this.tagService.findAllTags({
+      this.tags$ = this.tagService.findAllTags({
         query: {
           orderByChild : "description",
         }
-      }).subscribe(tags => {
-        console.log("Tags", tags);
-        this.isLoading = false;
-        this.tags = tags
-      });
-
+      })
     }
 
     addNewItem() {

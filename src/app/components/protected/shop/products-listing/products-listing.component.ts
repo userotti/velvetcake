@@ -10,7 +10,7 @@ import { Tag }             from '../../../../models/tag.model';
 import { TagService }             from '../../../../services/tag.service';
 
 import { RelationManagerService }             from '../../../../services/relation-manager.service';
-
+import 'rxjs/add/operator/do';
 @Component({
   selector: 'app-products-listing',
   templateUrl: './products-listing.component.html',
@@ -20,8 +20,8 @@ export class ProductsListingComponent implements OnInit {
 
   //refernce to the specific product's tags populated
   tagsProductsListPopulated: Observable<any[]>;
-  products: Product[];
-  tags: Tag[];
+  products$: Observable<Product[]>;
+  tags$: Observable<Tag[]>;
   selectedTag: Tag;
 
   loading: boolean;
@@ -34,26 +34,32 @@ export class ProductsListingComponent implements OnInit {
 
   ngOnInit() {
 
-    this.tagService.findAllTags({
+    this.tags$ = this.tagService.findAllTags({
       query: {
         orderByChild : "description",
       }
-    }).subscribe(tags => {
+    }).do(tags => {
 
-      this.tags = tags;
-      this.setSelectedTag(tags[0]);
+      if (tags.length){
+        this.selectTag(tags[0]);
+      }
 
     });
 
 
   }
 
-  setSelectedTag(tag: Tag){
+  selectTag(tag: Tag){
 
     this.selectedTag = tag;
-    this.relationManagerService.populateRelationWith('tagsProducts', 'products', tag.$key).subscribe((products)=>{
-      this.products = products;
-    });
+    this.products$ = this.relationManagerService.populateRelationWith('tagsProducts', 'products', tag.$key);
+
+  }
+
+  gotoProduct(product: Product){
+
+      console.log(ProductsListingComponent.name, product);
+      this.router.navigate(['/shop/add-product', product.$key]);
 
   }
 

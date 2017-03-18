@@ -3,10 +3,11 @@
   <button role="button" class="btn btn-success" (click)="addNewItem()" > + Add new adjustment </button>
 </div>
 
-<div *ngIf="loading">Loading...</div>
-
 <div *ngIf="!loading">
   <ul class="list-group">
-    <a *ngFor="let adjustment of adjustments" [routerLink]="[adjustment.$key]" class="list-group-item list-group-item-action">{{ adjustment.description }}</a>
+    <a *ngFor="let adjustment of adjustments$ | async" [routerLink]="[adjustment.$key]" class="list-group-item list-group-item-action">{{ adjustment.description }}</a>
   </ul>
+
+  <div *ngIf="(adjustments$ | async)?.length==0">No items found.</div>
+
 </div>

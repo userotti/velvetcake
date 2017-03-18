@@ -3,10 +3,11 @@
   <button role="button" class="btn btn-success" (click)="addNewItem()" > + Add new tag </button>
 </div>
 
-<div *ngIf="isLoading">Loading data...</div>
-
-<div *ngIf="!isLoading">
+<div>
   <ul class="list-group">
-    <a *ngFor="let tag of tags" [routerLink]="[tag.$key]" class="list-group-item list-group-item-action">{{ tag.description }}</a>
+    <a *ngFor="let tag of tags$ | async" [routerLink]="[tag.$key]" class="list-group-item list-group-item-action">{{ tag.description }}</a>
   </ul>
+
+  <div *ngIf="(tags$ | async)?.length==0">No items found.</div>
+
 </div>

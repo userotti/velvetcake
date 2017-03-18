@@ -3,10 +3,12 @@
   <button role="button" class="btn btn-success" (click)="addNewItem()" > + Add new category </button>
 </div>
 
-<div *ngIf="isLoading">Loading data...</div>
 
-<div *ngIf="!isLoading">
+<div>
   <ul class="list-group">
-    <a *ngFor="let productCategory of productCategories" [routerLink]="[productCategory.$key]" class="list-group-item list-group-item-action">{{ productCategory.description }}</a>
+    <a *ngFor="let productCategory of productCategories$ | async" [routerLink]="[productCategory.$key]" class="list-group-item list-group-item-action">{{ productCategory.description }}</a>
   </ul>
+
+  <div *ngIf="(productCategories$ | async)?.length==0">No items found.</div>
+
 </div>

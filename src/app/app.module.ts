@@ -38,6 +38,8 @@ import { TagService } from './services/tag.service';
 import { ProductCategoryService } from './services/product-category.service';
 import { AdjustmentService } from './services/adjustment.service';
 import { AddOnService } from './services/add-on.service';
+import { OrderLineService } from './services/order-line.service';
+
 import { ViewOrdersComponent } from './components/protected/orders/view-orders/view-orders.component';
 import { ViewOrderComponent } from './components/protected/orders/view-order/view-order.component';
 import { ProfileComponent } from './components/protected/profile/profile.component';
@@ -47,6 +49,10 @@ import { AddProductComponent } from './components/protected/shop/add-product/add
 import { FinilizeOrderComponent } from './components/protected/shop/finilize-order/finilize-order.component';
 import { CheckoutComponent } from './components/protected/shop/checkout/checkout.component';
 import { ListingItemComponent } from './components/protected/shop/products-listing/listing-item/listing-item.component';
+import { FilterProductByDescription } from './pipes/filterProductByDescription';
+import { ImageViewerComponent } from './components/protected/shop/add-product/image-viewer/image-viewer.component';
+import { OrderLineAdjustmentsManagerComponent } from './components/protected/shop/add-product/order-line-adjustments-manager/order-line-adjustments-manager.component';
+import { OrderLineAddOnsManagerComponent } from './components/protected/shop/add-product/order-line-add-ons-manager/order-line-add-ons-manager.component';
 
 
 const myFirebaseAuthConfig = {
@@ -86,8 +92,11 @@ const myFirebaseAuthConfig = {
     AddProductComponent,
     FinilizeOrderComponent,
     CheckoutComponent,
-    ListingItemComponent
-
+    ListingItemComponent,
+    FilterProductByDescription,
+    ImageViewerComponent,
+    OrderLineAdjustmentsManagerComponent,
+    OrderLineAddOnsManagerComponent
   ],
   imports: [
     BrowserModule,
@@ -105,6 +114,7 @@ const myFirebaseAuthConfig = {
     ProductCategoryService,
     AdjustmentService,
     AddOnService,
+    OrderLineService
 
   ],
   bootstrap: [AppComponent]

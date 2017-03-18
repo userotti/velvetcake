@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, FormArray }   from '@angular/forms';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Router } from '@angular/router';
+import { Subscription, Observable }             from 'rxjs';
+
 
 import { Product }             from '../../../../models/product.model';
 import { ProductService }             from '../../../../services/product.service';
@@ -15,58 +18,35 @@ export class ProductsComponent implements OnInit {
 
   products: Product[];
   itemsFiltered: any[];
-  isLoading: boolean;
-  searchWord: String;
+  searchForm: FormGroup;
+  products$: Observable<Product[]>;
 
   constructor(private af: AngularFire,
               private router: Router,
-              private productService: ProductService){
+              private productService: ProductService,
+              private fb: FormBuilder){
 
+      this.searchForm = fb.group({
+        'search':  ['']
+      });
   }
 
   ngOnInit() {
 
-    this.isLoading = true;
-    this.searchWord = '';
-
-    this.productService.findAllProducts({
+    this.products$ = this.productService.findAllProducts({
       query: {
         orderByChild : "description",
       }
-    }).subscribe(products => {
-
-      console.log("Products: ", products);
-      this.isLoading = false;
-      this.products = products;
-      this.applySearchKeyWord();
-
-    });
-
-  }
-
-  applySearchKeyWord() {
-
-    if (!this.searchWord.length){
-      this.itemsFiltered = this.products
-    } else {
-      this.itemsFiltered = this.products.filter((item, index) => {
-        return item.description.toLowerCase().indexOf(this.searchWord.toLowerCase()) > -1;
-      });
-    }
+    })
 
   }
 
   addNewProduct() {
 
     this.productService.createNewProduct().then(item => {
-
       this.router.navigate(['/cms/products', item.key]);
-
     });
 
   }
 
-  // ngOnDestroy(){
-  //   this.subscription.unsubscribe();
-  // }
 }

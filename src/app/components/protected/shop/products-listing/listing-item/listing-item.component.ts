@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject } from '@angular/core'
+import { Component, OnInit, Input, Output, Inject, EventEmitter } from '@angular/core'
 import { ActivatedRoute, Params, Router }   from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormControl, FormArray }   from '@angular/forms';
 import { AngularFire, FirebaseObjectObservable, FirebaseListObservable, FirebaseApp } from 'angularfire2';
@@ -18,11 +18,16 @@ import { ProductCategory }             from '../../../../../models/product-categ
 export class ListingItemComponent implements OnInit {
 
   @Input() product: Product;
+  @Output() onClick = new EventEmitter<Product>();
 
   constructor() { }
 
   ngOnInit() {
-    
+
+  }
+
+  clicked(){
+    this.onClick.emit(this.product)
   }
 
 }

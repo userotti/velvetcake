@@ -62,7 +62,7 @@
       <div class="col-9">
         <select class="form-control" formControlName="product_category">
            <option value="" disabled >Select a tag</option>
-           <option *ngFor="let category of productCategoryListObservable | async"
+           <option *ngFor="let category of productCategories$ | async"
              [value]="category.$key">
                 {{category.description}}
            </option>

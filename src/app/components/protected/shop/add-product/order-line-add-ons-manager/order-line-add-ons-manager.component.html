@@ -1,0 +1,25 @@
+<form #orderLineAddOnsForm="ngForm">
+
+  <div  class="form-group row" >
+    <label class="col-3 col-form-label">AddOns</label>
+    <div class="col-9">
+
+      <div class="d-flex justify-content-start">
+          <label role="button" class="btn btn-success mr-2" (click)="addAddOn(orderLineAddOnsForm.value.addOns)"> Add Add On </label>
+          <select class="form-control" ngModel name="addOns">
+             <option value="" disabled >Select an add on</option>
+             <option *ngFor="let addOn of addOns$ | async"
+               [value]="addOn.$key">
+                  {{addOn.description}}
+             </option>
+          </select>
+      </div>
+
+      <div class="">
+        <label role="button" class="btn btn-primary mr-2" *ngFor="let addOn of orderLineAddOns$ | async"> {{addOn.description}} <i class="fa fa-close" (click)="removeAddOn(addOn.$key)">  </i></label>
+      </div>
+
+    </div>
+  </div>
+
+</form>

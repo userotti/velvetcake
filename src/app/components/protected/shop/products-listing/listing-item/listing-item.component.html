@@ -1,3 +1,9 @@
-<div class="bounding-box" [ngStyle]="{'background-image': 'url(' + product.thumbnail_url + ')'}" >
+<div class="production-contianer" (click)="clicked(product)">
+  <div class="image-box" [ngStyle]="{'background-image': 'url(' + product.thumbnail_url + ')'}" >
+  </div>
+  <div class="description-price-section">
+    <p> {{product.description}} </p>
+    <span> R {{product.price}} </span>
+  </div>
 
 </div>

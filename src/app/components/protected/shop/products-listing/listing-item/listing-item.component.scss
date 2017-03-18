@@ -1,8 +1,17 @@
-.bounding-box {
-  width:200px;
-  height:200px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+.production-contianer {
+    padding: 10px;
+    cursor: pointer;
 
+    .image-box {
+      width:180px;
+      height:180px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .description-price-section {
+      padding: 10px;
+      text-align: center;
+    }
 }

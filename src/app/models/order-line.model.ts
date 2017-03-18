@@ -2,7 +2,7 @@ export class OrderLine {
 
     constructor(
         public $key:string,
-        public amount: string,
+        public quantity: string,
         public product: string,
 
 
@@ -17,18 +17,18 @@ export class OrderLine {
 
     static fromJson({
         $key,
-        amount,
+        quantity,
         product}):OrderLine {
 
         return new OrderLine($key,
-        amount,
+        quantity,
         product);
     }
 
     public toStrippedJson():any {
 
       var stripped = {
-        amount: this.amount,
+        quantity: this.quantity,
         product: this.product,
 
       }
